@@ -12,55 +12,52 @@ import processing.core.PApplet;
  * @author ljphi
  */
 public class MySketch extends PApplet{
-    private Entity car1;
-    private Entity car2;
+    private Player player;
     
     public void settings(){
-        size(400,400);
+        size(800,400);
     }
     
     public void setup(){
         background(255);
-        car1 = new Entity(this, 50, 50, 1, "images/car.png");
-        car2 = new Entity(this, 100, 100, 2, "images/car.png");
+        player = new Player(this, 100, 100, "images/person.png");
         
     }
     
     public void draw(){
         background(255);
-        car1.draw();
-        car2.draw();
-        drawCollisions();
+        player.draw();
+        
+        if (keyPressed){
+            if(player.movingLeft){
+                player.move(-5, 0);
+            }
+            if(player.movingRight){
+                player.move(5, 0);
+            }
+        }
+//        drawCollisions();
+
 //        if (showInfo){
 //            person1.displayInfo(this);
 //        }
-        if (keyPressed){
-            if(keyCode == LEFT){
-                car2.move(-5,0);
-            }
-            else if(keyCode == RIGHT){
-                car2.move(5,0);
-            }
-            else if(keyCode == UP){
-                car2.move(0,-5);
-            }
-            else if(keyCode == DOWN){
-                car2.move(0,5);
-            }
-        }
-       car2.draw();
+        
+        
+        
+        
+          
 //       
 //       if (person1.isCollidiingWith(person2)){
 //           fill(255,0,0);
 //           this.text("oouch", person2.x, person2.y);
 //       }
     }
-    public void drawCollisions(){
-        if (car1.isCollidingWith(car2)){
-            fill(255, 0, 0);
-            this.text("CRASH", 200, 20);
-        }
-    }
+//    public void drawCollisions(){
+//        if (player.isCollidingWith(car2)){
+//            fill(255, 0, 0);
+//            this.text("CRASH", 200, 20);
+//        }
+//    }
     public void mousePressed(){
 //        if (person1.isClicked(mouseX, mouseY)){
 //            showInfo = true;
@@ -70,15 +67,44 @@ public class MySketch extends PApplet{
     }
     
     public void keyPressed(){
-//            if (stage == 0){
-//                if (keyCode == ENTER){
-//                    stage = 1;
-//                    int speed = Integer.parseInt(inputString);
-//                    car = new Car(this, 10,150, speed, "images/person.png");
-//                }
-//                else if (key != CODED){
-//                    inputString += key;
-//                }
-//            }
+        // make the player move left
+        if(keyCode == LEFT){
+            player.movingLeft = true;
+            System.out.println("moving left");
+        }
+        //make the player move right
+        if(keyCode == RIGHT){
+            player.movingRight = true;
+            System.out.println("moving right");
+        }
+        // make the player jump
+        if (keyCode == UP && !player.jumpKeyHeld){
+            player.keyPressed();
+            player.jumpKeyHeld = true;
+        }  
+        
     }
+    
+    public void keyReleased() {
+        // reset all the booleans for how the player is moving
+        if (keyCode == UP) {
+          player.jumpKeyHeld = false;
+          player.isJumping = false;
+        }
+
+        if (keyCode == LEFT) {
+          player.movingLeft = false;
+
+        }
+        
+        if (keyCode == RIGHT) {
+           player.movingRight = false;
+        }
 }
+    
+    
+    
+    
+}
+
+
