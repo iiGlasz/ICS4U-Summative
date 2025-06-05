@@ -5,7 +5,8 @@
 package myfirstsketch;
 
 import processing.core.PApplet;
-
+import java.util.ArrayList;
+import java.util.Random;
 
 /**
  *
@@ -13,6 +14,9 @@ import processing.core.PApplet;
  */
 public class MySketch extends PApplet{
     private Player player;
+    private ArrayList<Projectile> projectiles = new ArrayList <Projectile>();    
+    Random rand = new Random();
+    private int randomIntBounded;
     
     public void settings(){
         size(800,400);
@@ -21,36 +25,38 @@ public class MySketch extends PApplet{
     public void setup(){
         background(255);
         player = new Player(this, 100, 100, "images/person.png");
-        
+        for (int i = 0; i < 10; i++){
+            projectiles.add(new Projectile(this, rand.nextInt(301) + 400, rand.nextInt(100,300), 20, 20, false, rand.nextInt(-1,1)));
+        }
     }
     
     public void draw(){
         background(255);
         player.draw();
+        for (Projectile p : projectiles){
+            if (!p.used)
+            p.draw();
+        }
+        
         
         if (keyPressed){
             if(player.movingLeft){
-                player.move(-5, 0);
+                player.move(-5);
             }
             if(player.movingRight){
-                player.move(5, 0);
+                player.move(5);
             }
         }
-//        drawCollisions();
-
-//        if (showInfo){
-//            person1.displayInfo(this);
-//        }
-        
-        
-        
-        
+ 
           
-//       
-//       if (person1.isCollidiingWith(person2)){
-//           fill(255,0,0);
-//           this.text("oouch", person2.x, person2.y);
-//       }
+       for (Projectile p: projectiles){
+            if (player.isCollidingWith(p) && !p.used){
+               player.health -- ;
+               System.out.println(player.health);
+               p.used = true;
+           }
+       }
+
     }
 //    public void drawCollisions(){
 //        if (player.isCollidingWith(car2)){
@@ -70,18 +76,21 @@ public class MySketch extends PApplet{
         // make the player move left
         if(keyCode == LEFT){
             player.movingLeft = true;
-            System.out.println("moving left");
         }
         //make the player move right
         if(keyCode == RIGHT){
             player.movingRight = true;
-            System.out.println("moving right");
         }
         // make the player jump
         if (keyCode == UP && !player.jumpKeyHeld){
             player.keyPressed();
             player.jumpKeyHeld = true;
         }  
+        
+        if (key == 'z')
+            player.heal();
+        if (key == 'x')
+            player.attack();
         
     }
     
@@ -100,7 +109,7 @@ public class MySketch extends PApplet{
         if (keyCode == RIGHT) {
            player.movingRight = false;
         }
-}
+    }
     
     
     
