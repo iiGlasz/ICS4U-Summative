@@ -6,19 +6,20 @@ package myfirstsketch;
 
 import processing.core.PApplet;
 import processing.core.PImage;
+import java.util.ArrayList;
 /**
  *
  * @author ljphi
  */
 public class Player extends MySketch{
     // combat variables & stats
-    private int max_Health = 5;
+    private static int max_Health = 5;
     public int health = 5;
     private int discipline = 0;
     public int healthPots = 3;
     
     // drawing variables
-    public int x, y;
+    private int playerX, playerY;
     private int width, height;
     private PImage image;
     private PApplet app;
@@ -34,13 +35,22 @@ public class Player extends MySketch{
     public boolean jumpKeyHeld = false;
     public int numberJumps = 0;
     
+    // attack variables
+    private boolean isAttacking = false;
+    private int attackTimer = 0;
+    private int attackDuration = 10;
+    
+    private boolean canAttack = true;
+    private int cooldownTimer = 0;
+    private int cooldownDuration = 30;
+    
     
     
     
     public Player(PApplet p, int x, int y, String imagePath){
         this.app = p;
-        this.x = x;
-        this.y = y;
+        this.playerX = x;
+        this.playerY = y;
         this.max_Health = 5;
         this.health = 5;
         this.image = app.loadImage(imagePath);
@@ -49,7 +59,7 @@ public class Player extends MySketch{
     }
     
     public void move(int dx){
-        x += dx;
+        playerX += dx;
     }
     
     public void heal(){
@@ -59,9 +69,46 @@ public class Player extends MySketch{
         }
     }
     
-    public void attack(){
-        app.fill(255,0,0);
-        app.rect(x+width, y+2, 40, 50);
+    public void startAttack(){
+        if (canAttack){
+            isAttacking = true;
+            attackTimer = attackDuration;
+            canAttack = false;
+            cooldownTimer = cooldownDuration;
+        }
+    } 
+
+    
+    
+    public void attack(ArrayList<Projectile> projectiles){
+        if (isAttacking){
+            int attackX = playerX + width;
+            int attackY = playerY + 2;
+            int attackW = 40;
+            int attackH = 50;
+            app.fill(255,0,0);
+            app.rect(attackX, attackY, attackW, attackH);
+
+            for (Projectile p : projectiles) {
+                if (attackCollidingWith(p, attackX, attackY, attackW, attackH)) {
+                    p.used = true;
+                }
+            }
+
+
+            attackTimer --;
+            if (attackTimer <= 0){
+                isAttacking = false;
+            }
+        }
+        
+        if (!canAttack){
+            cooldownTimer --;
+            if (cooldownTimer <= 0){
+                canAttack = true;
+            }
+        }
+        
     }
   
     @Override
@@ -74,28 +121,39 @@ public class Player extends MySketch{
     }
     
     public boolean isCollidingWith(Projectile other){
-        boolean isLeftOfOtherRight = x < other.x + other.width;
-        boolean isRightOfOtherLeft = x + width > other.x;
-        boolean isAboveOtherBottom = y < other.y + other.height;
-        boolean isBelowOtherTop = y + height > other.y;
+        boolean isLeftOfOtherRight = playerX < other.projX + other.pWidth;
+        boolean isRightOfOtherLeft = playerX + width > other.projX;
+        boolean isAboveOtherBottom = playerY < other.projY + other.pHeight;
+        boolean isBelowOtherTop = playerY + height > other.projY;
+        
+        return isLeftOfOtherRight && isRightOfOtherLeft && isAboveOtherBottom && isBelowOtherTop;
+    }
+
+    public boolean attackCollidingWith(Projectile other, int attackX, int attackY, int attackW, int attackH){
+        boolean isLeftOfOtherRight = attackX < other.projX + other.pWidth;
+        boolean isRightOfOtherLeft = attackX + attackW > other.projX;
+        boolean isAboveOtherBottom = attackY < other.projY + other.pHeight;
+        boolean isBelowOtherTop = attackY + attackH > other.projY;
         
         return isLeftOfOtherRight && isRightOfOtherLeft && isAboveOtherBottom && isBelowOtherTop;
     }
     
     
     public void draw(){
-        if (isJumping || y < 300) {
+        if (isJumping || playerY < 300) {
             yVelocity += GRAVITY;
-            y += yVelocity;
+            playerY += yVelocity;
         
             // Land on ground
-            if (y >= 300) {
-              y = 300;
+            if (playerY >= 300) {
+              playerY = 300;
               yVelocity = 0;
               isJumping = false;
               numberJumps = 0;
             }
         }
+        
+        
         // draw a health bar rectangle
         app.fill(0,255,0);
         app.rect (20, 30, 10, 80);
@@ -103,6 +161,9 @@ public class Player extends MySketch{
         app.rect (20, 30, 10, 48);
         app.rect (20, 30, 10, 32);
         app.rect (20, 30, 10, 16); 
+        
+        
+        // replace healthbar with red depending on health
         app.fill(255,0,0);
         switch (health){
             case -1:
@@ -129,7 +190,7 @@ public class Player extends MySketch{
                    
         
         // draw the character sprite
-        app.image(image, x, y);
+        app.image(image, playerX, playerY);
     }
     
 }

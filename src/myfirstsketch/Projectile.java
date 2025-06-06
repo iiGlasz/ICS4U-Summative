@@ -12,34 +12,34 @@ import processing.core.PImage;
  * @author ljphi
  */
 public class Projectile {
-    public int x, y;
-    public int width, height;
+    public int projX, projY;
+    public int pWidth, pHeight;
     private PImage image;
     private PApplet app;
     public boolean used = false;
     private int xSpeed;
     private int ySpeed;
-    private final int XSPEED = -2;    
+    private final int XSPEED = 0;    
     
     
     public Projectile(PApplet p, int x, int y, int width, int height, boolean used, int ySpeed){
         this.app = p;
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
+        this.projX = x;
+        this.projY = y;
+        this.pWidth = width;
+        this.pHeight = height;
         this.used = used;
         this.xSpeed = XSPEED;
         this.ySpeed = ySpeed;
     }
     
     public void move(){
-        x += xSpeed;
-        y += ySpeed;
+        projX += xSpeed;
+        projY += ySpeed;
     }
     public void draw(){
         app.fill(255, 0, 0);
-        app.rect(x, y, width, height);
+        app.rect(projX, projY, pWidth, pHeight);
         this.move();
     }
 }

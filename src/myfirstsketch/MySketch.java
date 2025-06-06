@@ -14,9 +14,13 @@ import java.util.Random;
  */
 public class MySketch extends PApplet{
     private Player player;
-    private ArrayList<Projectile> projectiles = new ArrayList <Projectile>();    
+    public ArrayList<Projectile> projectiles = new ArrayList <Projectile>();    
     Random rand = new Random();
-    private int randomIntBounded;
+    
+    boolean canHeal = true;
+    boolean canAttack = true;
+    
+    
     
     public void settings(){
         size(800,400);
@@ -58,19 +62,7 @@ public class MySketch extends PApplet{
        }
 
     }
-//    public void drawCollisions(){
-//        if (player.isCollidingWith(car2)){
-//            fill(255, 0, 0);
-//            this.text("CRASH", 200, 20);
-//        }
-//    }
-    public void mousePressed(){
-//        if (person1.isClicked(mouseX, mouseY)){
-//            showInfo = true;
-//        } else{
-//            showInfo = false;
-//        }
-    }
+
     
     public void keyPressed(){
         // make the player move left
@@ -87,31 +79,56 @@ public class MySketch extends PApplet{
             player.jumpKeyHeld = true;
         }  
         
-        if (key == 'z')
+        //healing
+        if (key == 'z' && canHeal){
             player.heal();
-        if (key == 'x')
-            player.attack();
+            canHeal = false;
+        }
+        //attacking
+        if (key == 'x' && canAttack) {
+            player.attack(projectiles);
+            canAttack = false;
+        }
         
     }
     
     public void keyReleased() {
         // reset all the booleans for how the player is moving
         if (keyCode == UP) {
-          player.jumpKeyHeld = false;
-          player.isJumping = false;
+            player.jumpKeyHeld = false;
+            player.isJumping = false;
         }
 
         if (keyCode == LEFT) {
-          player.movingLeft = false;
-
+            player.movingLeft = false;
         }
         
         if (keyCode == RIGHT) {
            player.movingRight = false;
         }
+        
+        if (key == 'z'){
+            canHeal = true;
+        }
+
+        if (key == 'x'){
+            canAttack = true    ;
+        }
+
     }
     
     
+    
+    
+    
+    
+    public void mousePressed(){
+//        if (person1.isClicked(mouseX, mouseY)){
+//            showInfo = true;
+//        } else{
+//            showInfo = false;
+//        }
+    }
     
     
 }
