@@ -41,6 +41,7 @@ public class Entity{
     
     
     public void move(Player player){
+        // follow the player
         if (this.x > player.playerX){
             x -= 2 * speed;
         }

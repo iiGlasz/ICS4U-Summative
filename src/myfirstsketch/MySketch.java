@@ -16,10 +16,12 @@ public class MySketch extends PApplet{
     private Player player;
     public ArrayList<Projectile> projectiles = new ArrayList <Projectile>();  
     public ArrayList<Entity> entities = new ArrayList <Entity>(); 
+    private Scene scene;
     Random rand = new Random();
     
     boolean canHeal = true;
     boolean canAttack = true;
+    boolean combat = true;
     
     
     
@@ -30,6 +32,7 @@ public class MySketch extends PApplet{
     public void setup(){
         background(255);
         player = new Player(this, 100, 100, "images/person.png");
+        scene = new Scene(this);
 //        for (int i = 0; i < 10; i++){
 //            projectiles.add(new Projectile(this, rand.nextInt(301) + 400, rand.nextInt(100,300), 20, 20, false, rand.nextInt(-1,1)));
 //        }
@@ -40,45 +43,51 @@ public class MySketch extends PApplet{
     }
     
     public void draw(){
-        background(255);
-        player.draw(projectiles, entities);
-        TeamMembers.buffs(player);
-        for (Projectile p : projectiles){
-            if (!p.used)
-            p.draw();
-        }
-        for (Entity e : entities){
-            if (!e.used)
-            e.draw(player);
-        }
-        
-        
-        if (keyPressed){
-            if(player.movingLeft && player.playerX >= 0){
-                player.move(-5);
+        if (combat){
+            background(255);
+            player.draw(projectiles, entities);
+            TeamMembers.buffs(player);
+            for (Projectile p : projectiles){
+                if (!p.used)
+                p.draw();
             }
-            if(player.movingRight && player.playerX <= 800 - player.width){
-                player.move(5);
+            for (Entity e : entities){
+                if (!e.used)
+                    e.draw(player);
+                else if (e.used){
+                    combat = false;
+                }
             }
-        }
- 
-          
-       for (Projectile p: projectiles){
-            if (player.isCollidingWith(p) && !p.used){
-               player.health -- ;
-               System.out.println(player.health);
-               p.used = true;
-           }
-       }
-       for (Entity e: entities){
-            if (player.entityColiision(e) && !e.used){
-               player.health -- ;
-               System.out.println(player.health);
-               e.used = true;
-           }
-       }
-       
 
+
+            if (keyPressed){
+                if(player.movingLeft && player.playerX >= 0){
+                    player.move(-5);
+                }
+                if(player.movingRight && player.playerX <= 800 - player.width){
+                    player.move(5);
+                }
+            }
+
+
+           for (Projectile p: projectiles){
+                if (player.isCollidingWith(p) && !p.used){
+                   player.health -- ;
+                   System.out.println(player.health);
+                   p.used = true;
+               }
+           }
+           for (Entity e: entities){
+                if (player.entityColiision(e) && !e.used){
+                   player.health -- ;
+                   System.out.println(player.health);
+                   e.used = true;
+               }
+           }
+        }
+        if (!combat){
+            scene.drawScreen();
+        }
     }
 
     

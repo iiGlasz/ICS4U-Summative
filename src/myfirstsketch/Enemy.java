@@ -10,6 +10,7 @@ import processing.core.PImage;
  * @author ljphi
  */
 public class Enemy extends Entity{
+    private int enemyHealth;
     
     public Enemy(PApplet p, int x, int y, int width, int height, int speed){ //, String imagePath
         super(p, x, y, width, height, speed);
