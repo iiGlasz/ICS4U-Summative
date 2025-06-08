@@ -8,12 +8,25 @@ package myfirstsketch;
  *
  * @author ljphi
  */
-//public class TeamMembers {
-//    private boolean pigsy;
-//    private boolean sandy;
-//    
-//    if (pigsy)
-//        for 
-//    if (sandy)
-//        
-//}
+public class TeamMembers{
+    private static boolean pigsy = false;
+    private static int healingCD = 1200; //time in frames
+    
+    private static boolean sandy = false;
+    
+    public static void buffs(Player player){
+        if (pigsy){
+            healingCD--;
+            if (healingCD <= 0 && player.health < player.max_Health){
+                player.health++;
+                healingCD = 800;
+            }
+        }
+       
+        if (sandy){
+            player.damage += 30;
+        }
+    }
+    
+        
+}

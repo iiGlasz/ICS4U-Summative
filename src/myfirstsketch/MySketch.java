@@ -14,7 +14,8 @@ import java.util.Random;
  */
 public class MySketch extends PApplet{
     private Player player;
-    public ArrayList<Projectile> projectiles = new ArrayList <Projectile>();    
+    public ArrayList<Projectile> projectiles = new ArrayList <Projectile>();  
+    public ArrayList<Entity> entities = new ArrayList <Entity>(); 
     Random rand = new Random();
     
     boolean canHeal = true;
@@ -29,25 +30,34 @@ public class MySketch extends PApplet{
     public void setup(){
         background(255);
         player = new Player(this, 100, 100, "images/person.png");
-        for (int i = 0; i < 10; i++){
-            projectiles.add(new Projectile(this, rand.nextInt(301) + 400, rand.nextInt(100,300), 20, 20, false, rand.nextInt(-1,1)));
+//        for (int i = 0; i < 10; i++){
+//            projectiles.add(new Projectile(this, rand.nextInt(301) + 400, rand.nextInt(100,300), 20, 20, false, rand.nextInt(-1,1)));
+//        }
+        
+        for (int i = 0; i < 5; i++){
+            entities.add(new Enemy(this, rand.nextInt(351) + 350, 300, 20, 50, rand.nextInt(1,3)));
         }
     }
     
     public void draw(){
         background(255);
-        player.draw();
+        player.draw(projectiles, entities);
+        TeamMembers.buffs(player);
         for (Projectile p : projectiles){
             if (!p.used)
             p.draw();
         }
+        for (Entity e : entities){
+            if (!e.used)
+            e.draw(player);
+        }
         
         
         if (keyPressed){
-            if(player.movingLeft){
+            if(player.movingLeft && player.playerX >= 0){
                 player.move(-5);
             }
-            if(player.movingRight){
+            if(player.movingRight && player.playerX <= 800 - player.width){
                 player.move(5);
             }
         }
@@ -60,18 +70,30 @@ public class MySketch extends PApplet{
                p.used = true;
            }
        }
+       for (Entity e: entities){
+            if (player.entityColiision(e) && !e.used){
+               player.health -- ;
+               System.out.println(player.health);
+               e.used = true;
+           }
+       }
+       
 
     }
 
     
     public void keyPressed(){
         // make the player move left
-        if(keyCode == LEFT){
+        if(keyCode == LEFT ){
             player.movingLeft = true;
+            player.facingLeft = true;
+            player.facingRight = false;
         }
         //make the player move right
-        if(keyCode == RIGHT){
+        if(keyCode == RIGHT ){
             player.movingRight = true;
+            player.facingLeft = false;
+            player.facingRight = true;
         }
         // make the player jump
         if (keyCode == UP && !player.jumpKeyHeld){
@@ -80,20 +102,22 @@ public class MySketch extends PApplet{
         }  
         
         //healing
-        if (key == 'z' && canHeal){
+        if (key == 'z' && canHeal && player.health > 0){
             player.heal();
             canHeal = false;
         }
+        
         //attacking
-        if (key == 'x' && canAttack) {
-            player.attack(projectiles);
-            canAttack = false;
+        if (key == 'x' && canAttack && player.health > 0) {
+            player.startAttack();
+            player.canAttack = false;
         }
         
     }
     
     public void keyReleased() {
         // reset all the booleans for how the player is moving
+        // prevents holding controls for healing and attacking
         if (keyCode == UP) {
             player.jumpKeyHeld = false;
             player.isJumping = false;
@@ -112,7 +136,7 @@ public class MySketch extends PApplet{
         }
 
         if (key == 'x'){
-            canAttack = true    ;
+            canAttack = true;
         }
 
     }

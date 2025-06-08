@@ -10,41 +10,50 @@ import processing.core.PImage;
  *
  * @author ljphi
  */
-public class Entity {
-    private int x;
-    private int y;
+public class Entity{
+    public int x, y;
+    public int width, height;
     private int speed;
     private PApplet app;
     private PImage image;
+    public boolean used = false;
     
-    public Entity(PApplet p, int x, int y, int speed, String imagePath){
+    public Entity(PApplet p, int x, int y, int width, int height, String imagePath){
         this.app = p;
         this.x = x;
         this.y = y;
-        this.speed = speed;
+        this.width = width;
+        this.height = height;
         this.image = app.loadImage(imagePath);
-        
     }
     
-    public void move(int dx,int dy){
-        x += dx * speed;
-        y += dy * speed;
+    public Entity(PApplet p, int x, int y, int width, int height, int speed){
+        this.app = p;
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+        this.speed = speed;
     }
     
-    public void draw(){
-        app.fill(255, 0,0);
-        app.rect(10+x, y, 40,20);
-        app.fill(0);
-        app.ellipse(10+x, y + 20, 10,10);
-        app.ellipse(50+x,y + 20, 10,10);
+    
+    
+    
+    
+    public void move(Player player){
+        if (this.x > player.playerX){
+            x -= 2 * speed;
+        }
+        else if (this.x < player.playerX){
+            x += 2 * speed;
+        }
     }
     
-    public boolean isCollidingWith(Entity other){
-        boolean isLeftOfOtherRight = x < other.x + other.image.pixelWidth;
-        boolean isRightOfOtherLeft = x + image.pixelWidth > other.x;
-        boolean isAboveOtherBottom = y < other.y + other.image.pixelHeight;
-        boolean isBelowOtherTop = y + image.pixelHeight > other.y;
-        
-        return isLeftOfOtherRight && isRightOfOtherLeft && isAboveOtherBottom && isBelowOtherTop;
+    public void draw(Player player){
+        app.fill(255, 0, 0);
+        app.rect(x, y, width, height);
+        this.move(player);
     }
+    
+
 }
