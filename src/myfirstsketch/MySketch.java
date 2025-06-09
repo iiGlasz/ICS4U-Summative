@@ -22,7 +22,6 @@ public class MySketch extends PApplet{
     
     boolean canHeal = true;
     boolean canAttack = true;
-    boolean combat = true;
     
     
     
@@ -32,12 +31,12 @@ public class MySketch extends PApplet{
     
     public void setup(){
         background(255);
-        player = new Player(this, 100, 100, "images/person.png");
+        player = new Player(this, 100, 100, "images/wukong-idle-right.png", "images/attack.png");
         scene = new Scene(this);
         boss = new Bosses(this, 600, 0, 200, 400);
-//        for (int i = 0; i < 10; i++){
-//            projectiles.add(new Projectile(this, rand.nextInt(301) + 400, rand.nextInt(100,300), 20, 20, false, rand.nextInt(-1,1)));
-//        }
+        for (int i = 0; i < 10; i++){
+            projectiles.add(new Projectile(this, rand.nextInt(301) + 400, rand.nextInt(100,300), 20, 20, false, rand.nextInt(-1,1)));
+        }
         
 //        for (int i = 0; i < 5; i++){
 //            entities.add(new Enemy(this, rand.nextInt(351) + 350, 300, 20, 50, rand.nextInt(1,3)));
@@ -60,7 +59,7 @@ public class MySketch extends PApplet{
                 if (!e.used)
                     e.draw(player);
                 else if (e.used){
-                    combat = false;
+//                    combat = false;
                 }
             }
 
@@ -101,13 +100,13 @@ public class MySketch extends PApplet{
     
     public void keyPressed(){
         // make the player move left
-        if(keyCode == LEFT ){
+        if(keyCode == LEFT){
             player.movingLeft = true;
             player.facingLeft = true;
             player.facingRight = false;
         }
         //make the player move right
-        if(keyCode == RIGHT ){
+        if(keyCode == RIGHT){
             player.movingRight = true;
             player.facingLeft = false;
             player.facingRight = true;
@@ -127,7 +126,7 @@ public class MySketch extends PApplet{
         //attacking
         if (key == 'x' && canAttack && player.health > 0) {
             player.startAttack();
-            player.canAttack = false;
+            canAttack = false;
         }
         
     }

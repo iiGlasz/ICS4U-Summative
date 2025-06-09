@@ -23,6 +23,7 @@ public class Player extends MySketch{
     public int width, height;
     private PImage image;
     private PApplet app;
+    private PImage attackImage;
     
     // movement variables
     private int yVelocity = 0;
@@ -50,7 +51,7 @@ public class Player extends MySketch{
     
     
     // constructor
-    public Player(PApplet p, int x, int y, String imagePath){
+    public Player(PApplet p, int x, int y, String imagePath, String attackImage){
         this.app = p;
         this.playerX = x;
         this.playerY = y;
@@ -59,6 +60,7 @@ public class Player extends MySketch{
         this.image = app.loadImage(imagePath);
         this.width = image.width;
         this.height = image.height;
+        this.attackImage = app.loadImage(attackImage);
     }
     
     public void move(int dx){
@@ -172,21 +174,28 @@ public class Player extends MySketch{
             app.fill(0);
             app.rect(400,0,400,400);
         }
-        
-        
+        // facing left
+        if (facingLeft){
+            this.image = app.loadImage("images/wukong-idle-left.png");
+        }
+        else { //facing right
+            this.image = app.loadImage("images/wukong-idle-right.png");
+        }
         // Attacking mechanics
         if (isAttacking){
-            int attackX = playerX + width;
-            int attackY = playerY -5;
+            int attackX = playerX + width - 15;
+            int attackY = playerY + 6;
             int attackW = 40;
             int attackH = 50;
+            
             // switch the direction of the attack based on the direction the player is moving
             if (facingLeft){
+//                this.attackImage = app.loadImage();
                 attackX = playerX - attackW;
             }
             
             app.fill(255,0,0);
-            app.rect(attackX, attackY, attackW, attackH);
+            app.image(attackImage, attackX, attackY, attackW, attackH);
 
             for (Projectile p : projectiles){
                 if (attackCollidingWith(p, attackX, attackY, attackW, attackH)) {

@@ -33,19 +33,18 @@ public class Bosses extends Entity{
         // draw a health bar rectangle 
         app.fill(0,255,0);
         app.rect (130, 360, 300, 25);
- 
-        
-        // replace healthbar with red depending on health
-        app.fill(255,0,0);
-        app.rect(130 + currentBossHealth, 360, bossHealth - currentBossHealth, 25);
-        
-            
         
         // if health drops to 0
         if (bossHealth <= 0){
             bossHealth = 0;
+            currentBossHealth = 0;
             this.used = true;
             app.rect(400,0,400,400);
+        }
+        else {
+            // replace healthbar with red depending on health
+            app.fill(255,0,0);
+            app.rect(130 + currentBossHealth, 360, bossHealth - currentBossHealth, 25);
         }
     }
     

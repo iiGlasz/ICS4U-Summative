@@ -11,7 +11,7 @@ import processing.core.PImage;
  *
  * @author ljphi
  */
-public class Projectile {
+public class Projectile{
     public int projX, projY;
     public int pWidth, pHeight;
     private PImage image;
