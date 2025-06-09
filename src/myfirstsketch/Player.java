@@ -45,7 +45,9 @@ public class Player extends MySketch{
     public boolean canAttack = true;
     private int cooldownTimer = 0;
     private int cooldownDuration = 20;
-    public int damage = 50;
+    public int damage = 15;
+    
+    
     
     // constructor
     public Player(PApplet p, int x, int y, String imagePath){
@@ -77,12 +79,8 @@ public class Player extends MySketch{
             attackTimer = attackDuration;
             cooldownTimer = cooldownDuration;
         }
-    } 
-
-
+    }
     
-        
-  
     @Override
     public void keyPressed() {
         if (!isJumping && numberJumps < 2) {
@@ -199,6 +197,11 @@ public class Player extends MySketch{
             for (Entity e : entities){
                 if (attackCollidingWith(e, attackX, attackY, attackW, attackH)) {
                     e.used = true;
+                    if (e instanceof Bosses && e.eCanBeHit){
+                        Bosses boss = (Bosses) e; 
+                        boss.currentBossHealth -= damage;
+                        e.eCanBeHit = false;
+                    }
                 }
             }
             attackTimer --;
@@ -213,14 +216,16 @@ public class Player extends MySketch{
             
             if (cooldownTimer <= 0){
                 canAttack = true;
+                // make it so that bosses can be hit
+                for (Entity e : entities){
+                    if (e instanceof Bosses)
+                        e.eCanBeHit = true;     
+                }
             }
-        }
-        
-    
-                   
+        }  
         
         // draw the character sprite
         app.image(image, playerX, playerY);
     }
-    
+  
 }

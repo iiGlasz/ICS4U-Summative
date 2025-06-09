@@ -19,6 +19,7 @@ public class Scene {
         this.app = p;
     }
     
+    // fix
     public void drawScreen(){
         int timer = 1;
         if (levelClear){

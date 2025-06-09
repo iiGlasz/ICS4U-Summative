@@ -17,6 +17,7 @@ public class MySketch extends PApplet{
     public ArrayList<Projectile> projectiles = new ArrayList <Projectile>();  
     public ArrayList<Entity> entities = new ArrayList <Entity>(); 
     private Scene scene;
+    public Entity boss;
     Random rand = new Random();
     
     boolean canHeal = true;
@@ -33,20 +34,24 @@ public class MySketch extends PApplet{
         background(255);
         player = new Player(this, 100, 100, "images/person.png");
         scene = new Scene(this);
+        boss = new Bosses(this, 600, 0, 200, 400);
 //        for (int i = 0; i < 10; i++){
 //            projectiles.add(new Projectile(this, rand.nextInt(301) + 400, rand.nextInt(100,300), 20, 20, false, rand.nextInt(-1,1)));
 //        }
         
-        for (int i = 0; i < 5; i++){
-            entities.add(new Enemy(this, rand.nextInt(351) + 350, 300, 20, 50, rand.nextInt(1,3)));
-        }
+//        for (int i = 0; i < 5; i++){
+//            entities.add(new Enemy(this, rand.nextInt(351) + 350, 300, 20, 50, rand.nextInt(1,3)));
+//        }
+        entities.add(boss);
     }
     
     public void draw(){
-        if (combat){
+//        if (combat){
             background(255);
-            player.draw(projectiles, entities);
+            
             TeamMembers.buffs(player);
+            boss.draw(player);
+            player.draw(projectiles, entities);
             for (Projectile p : projectiles){
                 if (!p.used)
                 p.draw();
@@ -82,12 +87,15 @@ public class MySketch extends PApplet{
                    player.health -- ;
                    System.out.println(player.health);
                    e.used = true;
+                   if (e instanceof Bosses){
+                       e.used = false;
+                   }
                }
            }
-        }
-        if (!combat){
-            scene.drawScreen();
-        }
+//        }
+//        if (!combat){
+//            scene.drawScreen();
+//        }
     }
 
     

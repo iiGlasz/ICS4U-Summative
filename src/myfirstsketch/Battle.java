@@ -9,5 +9,5 @@ package myfirstsketch;
  * @author ljphi
  */
 public class Battle {
-    
+    // prob just move the combat stuff to here like projectiles n entities
 }

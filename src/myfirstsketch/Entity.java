@@ -14,9 +14,10 @@ public class Entity{
     public int x, y;
     public int width, height;
     private int speed;
-    private PApplet app;
+    public PApplet app;
     private PImage image;
     public boolean used = false;
+    public boolean eCanBeHit;
     
     public Entity(PApplet p, int x, int y, int width, int height, String imagePath){
         this.app = p;
@@ -34,6 +35,15 @@ public class Entity{
         this.width = width;
         this.height = height;
         this.speed = speed;
+    }
+    
+    public Entity(PApplet p, int x, int y, int width, int height){
+        this.app = p;
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+        this.eCanBeHit = true;
     }
     
     
