@@ -12,46 +12,91 @@ import processing.core.PImage;
  */
 public class Scene {
     private static int chapterScreen = 0;
-    public boolean levelClear = true;
+    public boolean levelClear;
     private static PApplet app;
+    private int fillHeight;
+    private boolean fillingScreen;
+    private int fillSpeed;
     
     public Scene (PApplet p){
         this.app = p;
+        this.levelClear = true;
+        this.fillingScreen = false;
+        this.fillHeight = 0;
+        this.fillSpeed = 8;
     }
     
     // fix
     public void drawScreen(){
-        int timer = 1;
-        if (levelClear){
-            chapterScreen ++;
+        if (levelClear && !fillingScreen) {
+//            chapterScreen++;
             levelClear = false;
-            timer--;
-            for (int i = 0; i < 800; i += 20){
-                System.out.println("should work");
-                if (timer == 0){
-                    app.fill(0);
-                    app.rect(0,0,800, i);
-                    timer = 1;
-                }
-                
-            }
+            fillingScreen = true;
+            fillHeight = 0;  // reset
             
-            switch (chapterScreen){
-                case 0:
-                   
-                    
-                case 1:
+        }
+        if (fillingScreen) {
+            app.fill(0);
+            app.rect(0, 0, 800, fillHeight);
+            fillHeight += fillSpeed;
 
-                case 2:
 
-                case 3:
+            if (fillHeight >= 800) {
+                fillingScreen = false;
 
-                case 4:
-
-                case 5:
-            
+                // Now do something depending on chapterScreen
+//                switch (chapterScreen) {
+//                    case 0:
+//                        // ...
+//                        break;
+//                    case 1:
+//                        // ...
+//                        break;
+//                    case 2:
+//                        // ...
+//                        break;
+                    // etc.
+//                }
             }
         }
     }
-    
 }
+   
+        
+//        if (levelClear){
+//            chapterScreen ++;
+//            levelClear = false;
+//            timer--;
+//            for (int i = 0; i < 800; i += 20){
+//                if (timer == 0){
+//                    app.fill(0);
+//                    app.rect(0,0,800, i);
+//                    timer = 1;
+//                }
+//                
+//            }
+//            
+//            switch (chapterScreen){
+//                case 0:
+//                   
+//                    break; 
+//                case 1:
+//                    
+//                    break;
+//                case 2:
+//                    
+//                    break;
+//                case 3:
+//                    
+//                    break;
+//                case 4:
+//                    
+//                    break;
+//                case 5:
+//                    
+//                    break;
+//            }
+//        }
+//    }
+    
+

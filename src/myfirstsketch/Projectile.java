@@ -19,7 +19,12 @@ public class Projectile{
     public boolean used = false;
     private int xSpeed;
     private int ySpeed;
-    private final int XSPEED = 0;    
+    private final int XSPEED = -6;  
+    
+    private double yVelocity = 0;
+    private final double GRAVITY = 0.2;
+    
+     
     
     
     public Projectile(PApplet p, int x, int y, int width, int height, boolean used, int ySpeed){
@@ -35,7 +40,12 @@ public class Projectile{
     
     public void move(){
         projX += xSpeed;
-        projY += ySpeed;
+    }
+    
+    public void moveGravity(){
+        projX += xSpeed;
+        yVelocity += GRAVITY;
+        projY += yVelocity;
     }
     public void draw(){
         app.fill(255, 0, 0);

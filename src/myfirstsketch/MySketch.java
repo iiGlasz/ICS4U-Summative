@@ -13,7 +13,7 @@ import java.util.Random;
  * @author ljphi
  */
 public class MySketch extends PApplet{
-    private Player player;
+    public Player player;
     public ArrayList<Projectile> projectiles = new ArrayList <Projectile>();  
     public ArrayList<Entity> entities = new ArrayList <Entity>(); 
     private Scene scene;
@@ -22,7 +22,8 @@ public class MySketch extends PApplet{
     
     boolean canHeal = true;
     boolean canAttack = true;
-    
+    public static boolean combat = false;
+    public static int gameState = 0;
     
     
     public void settings(){
@@ -31,7 +32,7 @@ public class MySketch extends PApplet{
     
     public void setup(){
         background(255);
-        player = new Player(this, 100, 100, "images/wukong-idle-right.png", "images/attack.png");
+        player = new Player(this, 100, 100, "images/wukong/wukong-idle-right.png", "images/wukong/attack.png");
         scene = new Scene(this);
         boss = new Bosses(this, 600, 0, 200, 400);
         for (int i = 0; i < 10; i++){
@@ -45,56 +46,24 @@ public class MySketch extends PApplet{
     }
     
     public void draw(){
-//        if (combat){
-            background(255);
-            
-            TeamMembers.buffs(player);
-            boss.draw(player);
-            player.draw(projectiles, entities);
-            for (Projectile p : projectiles){
-                if (!p.used)
-                p.draw();
-            }
-            for (Entity e : entities){
-                if (!e.used)
-                    e.draw(player);
-                else if (e.used){
-//                    combat = false;
-                }
-            }
+        switch (gameState){
+            case 0:
+                drawMainMenu();
+                break;
+                
+            case 1:
+                background(255);
+                Battle battle = new Battle();
+                battle.BattleStart(player, projectiles, entities, (Bosses) boss, keyPressed);
 
-
-            if (keyPressed){
-                if(player.movingLeft && player.playerX >= 0){
-                    player.move(-5);
-                }
-                if(player.movingRight && player.playerX <= 800 - player.width){
-                    player.move(5);
-                }
-            }
-
-
-           for (Projectile p: projectiles){
-                if (player.isCollidingWith(p) && !p.used){
-                   player.health -- ;
-                   System.out.println(player.health);
-                   p.used = true;
-               }
-           }
-           for (Entity e: entities){
-                if (player.entityColiision(e) && !e.used){
-                   player.health -- ;
-                   System.out.println(player.health);
-                   e.used = true;
-                   if (e instanceof Bosses){
-                       e.used = false;
-                   }
-               }
-           }
-//        }
-//        if (!combat){
-//            scene.drawScreen();
-//        }
+                
+                break;
+                
+            case 2:
+                scene.drawScreen();
+        }
+        
+        
     }
 
     
@@ -170,7 +139,19 @@ public class MySketch extends PApplet{
 //        }
     }
     
-    
+    public void drawMainMenu() {
+        textAlign(CENTER);
+        fill(0);
+        textSize(40);
+        text("Journey to the West", width / 2, 150);
+
+        textSize(24);
+        text("Press ENTER to Start", width / 2, 250);
+        if (keyCode == ENTER){
+            combat = true;
+            gameState ++;
+        }
+    }
 }
 
 

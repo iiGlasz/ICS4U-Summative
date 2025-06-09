@@ -22,29 +22,33 @@ public class Bosses extends Entity{
         super(p, x, y, width, height);  
         this.bossHealth = 300;
         this.currentBossHealth = bossHealth;
-//        this.
     }
 
     @Override
     public void draw(Player player){
+        // draw the boss
         app.fill(255, 0, 0);
         app.rect(x, y, width, height);
         
         // draw a health bar rectangle 
+        
         app.fill(0,255,0);
         app.rect (130, 360, 300, 25);
-        
+    
         // if health drops to 0
-        if (bossHealth <= 0){
-            bossHealth = 0;
+        if (currentBossHealth <= 0){
             currentBossHealth = 0;
             this.used = true;
-            app.rect(400,0,400,400);
+            app.fill(255,0,0);
+            app.rect(130 + currentBossHealth, 360, bossHealth, 25);
+            MySketch.combat = false; // change this so you can get a chest or smth
+            MySketch.gameState++;
         }
         else {
             // replace healthbar with red depending on health
             app.fill(255,0,0);
             app.rect(130 + currentBossHealth, 360, bossHealth - currentBossHealth, 25);
+            
         }
     }
     

@@ -41,12 +41,17 @@ public class Player extends MySketch{
     // attack variables
     private boolean isAttacking = false;
     private int attackTimer = 0;
-    private int attackDuration = 10;
+    private int attackDuration = 10; // 0.16s
     
     public boolean canAttack = true;
-    private int cooldownTimer = 0;
-    private int cooldownDuration = 20;
     public int damage = 15;
+    private int cooldownTimer = 0;
+    private int cooldownDuration = 20; // .33s
+    
+    // stuff for i-frames
+    public boolean isInvincible = false;
+    private int invincibilityDuration = 40; // 0.75s
+    private int invincibilityTimer = 0;
     
     
     
@@ -73,6 +78,15 @@ public class Player extends MySketch{
             healthPots--;
         }
     }
+    
+    public void takeDamage() {
+    if (!isInvincible) {
+        this.health --;
+        // Do damage logic here (reduce health, etc.)
+        isInvincible = true;
+        invincibilityTimer = invincibilityDuration;
+    }
+}
     
     public void startAttack(){
         if (canAttack){
@@ -141,8 +155,27 @@ public class Player extends MySketch{
               numberJumps = 0;
             }
         }
-        
-        
+        // i-frames
+        if (isInvincible) {
+            app.fill(255, 255, 0);
+            invincibilityTimer--;
+            if (invincibilityTimer <= 0) {
+                isInvincible = false;
+            }
+        }
+        // if health drops to 0
+        if (health <= 0){
+            health = 0;
+            this.image = app.loadImage("images/wukong/dead.png");
+            MySketch.combat = false;
+        }
+        // facing left
+        else if (facingLeft){
+            this.image = app.loadImage("images/wukong/wukong-idle-left.png");
+        }
+        else { //facing right
+            this.image = app.loadImage("images/wukong/wukong-idle-right.png");
+        }
         // draw a health bar rectangle with sectioned parts
         app.fill(0,255,0);
         app.rect (20, 30, 10, 80);
@@ -168,19 +201,9 @@ public class Player extends MySketch{
                app.rect (20, 30, 10, 16); 
             
         }
-        // if health drops to 0
-        if (health <= 0){
-            health = 0;
-            app.fill(0);
-            app.rect(400,0,400,400);
-        }
-        // facing left
-        if (facingLeft){
-            this.image = app.loadImage("images/wukong-idle-left.png");
-        }
-        else { //facing right
-            this.image = app.loadImage("images/wukong-idle-right.png");
-        }
+        
+        
+        
         // Attacking mechanics
         if (isAttacking){
             int attackX = playerX + width - 15;
@@ -221,7 +244,6 @@ public class Player extends MySketch{
         
         if (!canAttack){
             cooldownTimer --;
-            System.out.println(cooldownTimer);
             
             if (cooldownTimer <= 0){
                 canAttack = true;
