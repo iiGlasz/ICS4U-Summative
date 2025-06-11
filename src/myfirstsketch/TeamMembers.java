@@ -9,7 +9,7 @@ package myfirstsketch;
  * @author ljphi
  */
 public class TeamMembers{
-    private static boolean pigsy = false;
+    private static boolean pigsy = true;
     private static int healingCD = 1200; //time in frames
     
     private static boolean sandy = false;
@@ -24,7 +24,7 @@ public class TeamMembers{
         }
        
         if (sandy){
-            player.damage += 30;
+            player.damage = 20;
         }
     }
     

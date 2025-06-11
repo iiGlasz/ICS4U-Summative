@@ -15,11 +15,13 @@ public class Battle extends PApplet{
         
     }
     // prob just move the combat stuff to here like projectiles n entities
+
     public void BattleStart(Player player, ArrayList<Projectile> projectiles, ArrayList<Entity> entities, Bosses boss, boolean keyPressed){
-            
+        
+            player.draw(projectiles, entities);
             TeamMembers.buffs(player);
             boss.draw(player);
-            player.draw(projectiles, entities);
+            
             for (Projectile p : projectiles){
                 if (!p.used)
                 p.draw();
@@ -27,11 +29,10 @@ public class Battle extends PApplet{
             for (Entity e : entities){
                 if (!e.used)
                     e.draw(player);
-                else if (e.used){
-//                    combat = false;
+                else if (e instanceof Bosses){
+                    e.used = false;
                 }
             }
-
 
             if (keyPressed){
                 if(player.movingLeft && player.playerX >= 0){
@@ -42,21 +43,16 @@ public class Battle extends PApplet{
                 }
             }
 
-
            for (Projectile p: projectiles){
                 if (player.isCollidingWith(p) && !p.used && !player.isInvincible){
                    player.takeDamage();
-                   p.used = true;
-                  
+                   p.used = true; 
                }
            }
+           
            for (Entity e: entities){
                 if (player.entityColiision(e) && !e.used && !player.isInvincible){
                    player.takeDamage();
-                   e.used = true;
-                   if (e instanceof Bosses){
-                       e.used = false;
-                   }
                }
            }
         }

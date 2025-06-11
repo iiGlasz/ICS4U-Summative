@@ -44,7 +44,7 @@ public class Player extends MySketch{
     private int attackDuration = 10; // 0.16s
     
     public boolean canAttack = true;
-    public int damage = 15;
+    public int damage = 100;
     private int cooldownTimer = 0;
     private int cooldownDuration = 20; // .33s
     
@@ -68,6 +68,13 @@ public class Player extends MySketch{
         this.attackImage = app.loadImage(attackImage);
     }
     
+    public void resetPlayer(){
+        playerX = 100;
+        health = 5;
+        facingRight = true;
+    }
+    
+    
     public void move(int dx){
         playerX += dx;
     }
@@ -82,7 +89,6 @@ public class Player extends MySketch{
     public void takeDamage() {
     if (!isInvincible) {
         this.health --;
-        // Do damage logic here (reduce health, etc.)
         isInvincible = true;
         invincibilityTimer = invincibilityDuration;
     }
@@ -143,26 +149,6 @@ public class Player extends MySketch{
     }
     
     public void draw(ArrayList<Projectile> projectiles, ArrayList<Entity> entities){
-        if (isJumping || playerY < 300) {
-            yVelocity += GRAVITY;
-            playerY += yVelocity;
-        
-            // Land on ground
-            if (playerY >= 300) {
-              playerY = 300;
-              yVelocity = 0;
-              isJumping = false;
-              numberJumps = 0;
-            }
-        }
-        // i-frames
-        if (isInvincible) {
-            app.fill(255, 255, 0);
-            invincibilityTimer--;
-            if (invincibilityTimer <= 0) {
-                isInvincible = false;
-            }
-        }
         // if health drops to 0
         if (health <= 0){
             health = 0;
@@ -176,6 +162,8 @@ public class Player extends MySketch{
         else { //facing right
             this.image = app.loadImage("images/wukong/wukong-idle-right.png");
         }
+        
+        
         // draw a health bar rectangle with sectioned parts
         app.fill(0,255,0);
         app.rect (20, 30, 10, 80);
@@ -199,10 +187,28 @@ public class Player extends MySketch{
                 app.rect (20, 30, 10, 32);
             case 4:
                app.rect (20, 30, 10, 16); 
-            
         }
         
+        if (isJumping || playerY < 300) {
+            yVelocity += GRAVITY;
+            playerY += yVelocity;
         
+            // Land on ground
+            if (playerY >= 300) {
+              playerY = 300;
+              yVelocity = 0;
+              isJumping = false;
+              numberJumps = 0;
+            }
+        }
+        // i-frames
+        if (isInvincible) {
+            app.fill(255, 255, 0);
+            invincibilityTimer--;
+            if (invincibilityTimer <= 0) {
+                isInvincible = false;
+            }
+        }
         
         // Attacking mechanics
         if (isAttacking){
@@ -213,7 +219,6 @@ public class Player extends MySketch{
             
             // switch the direction of the attack based on the direction the player is moving
             if (facingLeft){
-//                this.attackImage = app.loadImage();
                 attackX = playerX - attackW;
             }
             
@@ -233,6 +238,7 @@ public class Player extends MySketch{
                         Bosses boss = (Bosses) e; 
                         boss.currentBossHealth -= damage;
                         e.eCanBeHit = false;
+                        e.used = false;
                     }
                 }
             }
@@ -258,5 +264,6 @@ public class Player extends MySketch{
         // draw the character sprite
         app.image(image, playerX, playerY);
     }
+    
   
 }

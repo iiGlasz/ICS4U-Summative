@@ -16,15 +16,13 @@ public class Projectile{
     public int pWidth, pHeight;
     private PImage image;
     private PApplet app;
+    
     public boolean used = false;
     private int xSpeed;
     private int ySpeed;
-    private final int XSPEED = -6;  
-    
+    private final int XSPEED = -6; 
     private double yVelocity = 0;
-    private final double GRAVITY = 0.2;
-    
-     
+    private final double GRAVITY = 0.15;
     
     
     public Projectile(PApplet p, int x, int y, int width, int height, boolean used, int ySpeed){
@@ -50,6 +48,6 @@ public class Projectile{
     public void draw(){
         app.fill(255, 0, 0);
         app.rect(projX, projY, pWidth, pHeight);
-        this.move();
+        this.moveGravity();
     }
 }

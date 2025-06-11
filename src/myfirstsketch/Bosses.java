@@ -4,6 +4,7 @@ package myfirstsketch;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
+import java.util.ArrayList;
 import processing.core.PApplet;
 import processing.core.PImage; 
 
@@ -16,13 +17,18 @@ public class Bosses extends Entity{
     private int bossHealth = 300;
     public int currentBossHealth;
     private Projectile projectiles;
-    private int [][] attackPattern;
+    private int [][] projectilePattern; // [row][column]
     
     public Bosses (PApplet p, int x, int y, int width, int height){
         super(p, x, y, width, height);  
         this.bossHealth = 300;
         this.currentBossHealth = bossHealth;
     }
+    
+    public void attackPattern(){
+        
+    }
+  
 
     @Override
     public void draw(Player player){
@@ -41,8 +47,9 @@ public class Bosses extends Entity{
             this.used = true;
             app.fill(255,0,0);
             app.rect(130 + currentBossHealth, 360, bossHealth, 25);
+            MySketch.battleWon = true;
             MySketch.combat = false; // change this so you can get a chest or smth
-            MySketch.gameState++;
+            
         }
         else {
             // replace healthbar with red depending on health
@@ -50,7 +57,5 @@ public class Bosses extends Entity{
             app.rect(130 + currentBossHealth, 360, bossHealth - currentBossHealth, 25);
             
         }
-    }
-    
-    
+    } 
 }

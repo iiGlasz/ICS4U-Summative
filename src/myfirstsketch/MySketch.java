@@ -24,6 +24,11 @@ public class MySketch extends PApplet{
     boolean canAttack = true;
     public static boolean combat = false;
     public static int gameState = 0;
+    public static boolean canPressEnter = true;
+    public static boolean battleWon = false;
+    
+    boolean resetStage = true;
+    
     
     
     public void settings(){
@@ -32,39 +37,63 @@ public class MySketch extends PApplet{
     
     public void setup(){
         background(255);
-        player = new Player(this, 100, 100, "images/wukong/wukong-idle-right.png", "images/wukong/attack.png");
-        scene = new Scene(this);
-        boss = new Bosses(this, 600, 0, 200, 400);
-        for (int i = 0; i < 10; i++){
-            projectiles.add(new Projectile(this, rand.nextInt(301) + 400, rand.nextInt(100,300), 20, 20, false, rand.nextInt(-1,1)));
+        if (resetStage){
+            player = new Player(this, 100, 100, "images/wukong/wukong-idle-right.png", "images/wukong/attack.png");
+            scene = new Scene(this);
+            boss = new Bosses(this, 600, 0, 200, 400);
+            for (int i = 0; i < 10; i++){
+                projectiles.add(new Projectile(this, rand.nextInt(301) + 400, rand.nextInt(100,300), 20, 20, false, rand.nextInt(-1,1)));
+            }
+
+            for (int i = 0; i < 5; i++){
+                entities.add(new Enemy(this, rand.nextInt(351) + 350, 300, 20, 50, rand.nextInt(1,3)));
+            }
+
+            entities.add(boss);
+            resetStage = false;
         }
-        
-//        for (int i = 0; i < 5; i++){
-//            entities.add(new Enemy(this, rand.nextInt(351) + 350, 300, 20, 50, rand.nextInt(1,3)));
-//        }
-        entities.add(boss);
     }
     
     public void draw(){
         switch (gameState){
-            case 0:
-                drawMainMenu();
+            case 0:  
+                scene.drawMainMenu();    
+                if (canPressEnter && keyCode == ENTER){
+                    gameState ++;
+                    Scene.chapterScreen++;
+                    canPressEnter = false;
+                }
                 break;
-                
+               
             case 1:
-                background(255);
-                Battle battle = new Battle();
-                battle.BattleStart(player, projectiles, entities, (Bosses) boss, keyPressed);
-
-                
+                levelLoad(gameState);
+                System.out.println(gameState + " " + Scene.chapterScreen);
                 break;
                 
             case 2:
-                scene.drawScreen();
+                battleWon = false;
+                System.out.println(gameState + " " + Scene.chapterScreen);
+                levelLoad(gameState);
+                break;
+            case 3:
+                battleWon = false;
+                System.out.println(gameState + " " + Scene.chapterScreen);
+                levelLoad(gameState);
+                break;
+                
+            case 4:
+                battleWon = false;
+                System.out.println(gameState + " " + Scene.chapterScreen);
+                levelLoad(gameState);
+                break;
+            case 5: 
+                // ending  
         }
         
-        
+       
     }
+    
+    
 
     
     public void keyPressed(){
@@ -98,6 +127,9 @@ public class MySketch extends PApplet{
             canAttack = false;
         }
         
+        if (keyCode == ENTER && canPressEnter){
+            canPressEnter = false;
+        }
     }
     
     public void keyReleased() {
@@ -123,33 +155,49 @@ public class MySketch extends PApplet{
         if (key == 'x'){
             canAttack = true;
         }
+        
+        if (keyCode == ENTER){
+            canPressEnter = true;
+        }
 
     }
     
-    
-    
-    
-    
-    
-    public void mousePressed(){
+//    public void mousePressed(){
 //        if (person1.isClicked(mouseX, mouseY)){
 //            showInfo = true;
 //        } else{
 //            showInfo = false;
 //        }
-    }
+//    }
     
-    public void drawMainMenu() {
-        textAlign(CENTER);
-        fill(0);
-        textSize(40);
-        text("Journey to the West", width / 2, 150);
-
-        textSize(24);
-        text("Press ENTER to Start", width / 2, 250);
-        if (keyCode == ENTER){
-            combat = true;
-            gameState ++;
+    public void levelLoad(int gameState){
+        if (Scene.chapterScreen == gameState){    
+            scene.drawChapterScreen();
+            if (keyCode == ENTER && canPressEnter){
+                canPressEnter = false;
+                resetStage = true;
+                Scene.chapterScreen++;
+                combat = true;
+            }
+        }
+        else if (combat){
+            background(255);
+            setup();
+            Battle battle = new Battle();
+            battle.BattleStart(player, projectiles, entities, (Bosses) boss, keyPressed);
+        } 
+        // death, then reset the player
+        else if (player.health == 0 && !combat){
+            scene.deathScreen();
+            if (keyCode == ENTER && canPressEnter){
+                canPressEnter = false;
+                player.resetPlayer();
+                resetStage = true;
+                Scene.chapterScreen = gameState; 
+            }
+        }
+        else if (battleWon){
+            gameState++;
         }
     }
 }
