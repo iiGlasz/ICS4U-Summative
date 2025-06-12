@@ -25,7 +25,7 @@ public class Projectile{
     private final double GRAVITY = 0.15;
     
     
-    public Projectile(PApplet p, int x, int y, int width, int height, boolean used, int ySpeed){
+    public Projectile(PApplet p, int x, int y, int width, int height, boolean used, int ySpeed, String imagePath){
         this.app = p;
         this.projX = x;
         this.projY = y;
@@ -34,6 +34,7 @@ public class Projectile{
         this.used = used;
         this.xSpeed = XSPEED;
         this.ySpeed = ySpeed;
+        this.image = app.loadImage(imagePath);
     }
     
     public void move(){
@@ -45,9 +46,14 @@ public class Projectile{
         yVelocity += GRAVITY;
         projY += yVelocity;
     }
-    public void draw(){
+    public void drawGravity(){
         app.fill(255, 0, 0);
-        app.rect(projX, projY, pWidth, pHeight);
+        app.image(image, projX, projY);
         this.moveGravity();
+    }
+    public void drawStraight(){
+        app.fill(255, 0, 0);
+        app.image(image, projX, projY);
+        this.move();
     }
 }

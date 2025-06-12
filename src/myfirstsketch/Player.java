@@ -189,11 +189,12 @@ public class Player extends MySketch{
                app.rect (20, 30, 10, 16); 
         }
         
+        // jumping mechanics
         if (isJumping || playerY < 300) {
             yVelocity += GRAVITY;
             playerY += yVelocity;
         
-            // Land on ground
+            // landing on the ground
             if (playerY >= 300) {
               playerY = 300;
               yVelocity = 0;
@@ -201,9 +202,9 @@ public class Player extends MySketch{
               numberJumps = 0;
             }
         }
+        
         // i-frames
         if (isInvincible) {
-            app.fill(255, 255, 0);
             invincibilityTimer--;
             if (invincibilityTimer <= 0) {
                 isInvincible = false;

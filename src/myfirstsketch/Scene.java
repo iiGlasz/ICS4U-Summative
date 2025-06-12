@@ -3,11 +3,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package myfirstsketch;
-import static myfirstsketch.MySketch.canPressEnter;
-import static myfirstsketch.MySketch.gameState;
 import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
-import static processing.core.PConstants.ENTER;
 import processing.core.PImage;
 
 /**

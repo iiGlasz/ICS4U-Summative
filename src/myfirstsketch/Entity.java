@@ -16,7 +16,7 @@ public class Entity{
     private int speed;
     public PApplet app;
     private PImage image;
-    public boolean used = false;
+    public boolean used;
     public boolean eCanBeHit;
     
     public Entity(PApplet p, int x, int y, int width, int height, String imagePath){
@@ -28,13 +28,15 @@ public class Entity{
         this.image = app.loadImage(imagePath);
     }
     
-    public Entity(PApplet p, int x, int y, int width, int height, int speed){
+    public Entity(PApplet p, int x, int y, int width, int height, int speed, String imagePath, boolean used){
         this.app = p;
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
         this.speed = speed;
+        this.image = app.loadImage(imagePath);
+        this.used = false;
     }
     
     public Entity(PApplet p, int x, int y, int width, int height){
@@ -46,8 +48,12 @@ public class Entity{
         this.eCanBeHit = true;
     }
     
-    
-    
+    public Entity(PApplet p, int x, int y){
+        this.app = p;
+        this.x = x;
+        this.y = y;
+        this.eCanBeHit = true;
+    }
     
     
     public void move(Player player){
@@ -62,7 +68,7 @@ public class Entity{
     
     public void draw(Player player){
         app.fill(255, 0, 0);
-        app.rect(x, y, width, height);
+        app.image(image, x, y);
         this.move(player);
     }
     

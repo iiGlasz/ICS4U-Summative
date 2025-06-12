@@ -11,20 +11,15 @@ import java.util.ArrayList;
  * @author ljphi
  */
 public class Battle extends PApplet{
+    
     public Battle(){
-        
     }
-    // prob just move the combat stuff to here like projectiles n entities
 
     public void BattleStart(Player player, ArrayList<Projectile> projectiles, ArrayList<Entity> entities, Bosses boss, boolean keyPressed){
-        
-            player.draw(projectiles, entities);
             TeamMembers.buffs(player);
             boss.draw(player);
-            
-            for (Projectile p : projectiles){
-                if (!p.used)
-                p.draw();
+            if (boss.currentBossHealth > 0){
+                boss.attackPattern(player);
             }
             for (Entity e : entities){
                 if (!e.used)
@@ -55,5 +50,7 @@ public class Battle extends PApplet{
                    player.takeDamage();
                }
            }
+           // draw player last so it's on top
+            player.draw(projectiles, entities);
         }
     }

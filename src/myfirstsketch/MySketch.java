@@ -20,8 +20,11 @@ public class MySketch extends PApplet{
     public Entity boss;
     Random rand = new Random();
     
+    // variables for the player
     boolean canHeal = true;
     boolean canAttack = true;
+    
+    // variables to switch between parts of the game
     public static boolean combat = false;
     public static int gameState = 0;
     public static boolean canPressEnter = true;
@@ -38,15 +41,20 @@ public class MySketch extends PApplet{
     public void setup(){
         background(255);
         if (resetStage){
+            // clear ArrayLists each stage
+            projectiles.clear();
+            entities.clear();
+            // reset all the states of the things on screen
             player = new Player(this, 100, 100, "images/wukong/wukong-idle-right.png", "images/wukong/attack.png");
             scene = new Scene(this);
-            boss = new Bosses(this, 600, 0, 200, 400);
+            boss = new Bosses(this, 600, 0, 200, 400, 300, "images/demon1.png");
+            ((Bosses) boss).currentBossHealth = 300;
             for (int i = 0; i < 10; i++){
-                projectiles.add(new Projectile(this, rand.nextInt(301) + 400, rand.nextInt(100,300), 20, 20, false, rand.nextInt(-1,1)));
+                projectiles.add(new Projectile(this, rand.nextInt(700, 800), rand.nextInt(100,300), 20, 20, false, rand.nextInt(-1,1), "images/projectile.png"));
             }
 
             for (int i = 0; i < 5; i++){
-                entities.add(new Enemy(this, rand.nextInt(351) + 350, 300, 20, 50, rand.nextInt(1,3)));
+                entities.add(new Enemy(this, rand.nextInt(351) + 350, 300, 20, 50, rand.nextInt(1,3), "images/enemy.png", false));
             }
 
             entities.add(boss);
@@ -59,32 +67,43 @@ public class MySketch extends PApplet{
             case 0:  
                 scene.drawMainMenu();    
                 if (canPressEnter && keyCode == ENTER){
-                    gameState ++;
-                    Scene.chapterScreen++;
                     canPressEnter = false;
+                    Scene.chapterScreen++;
+                    gameState++;
                 }
                 break;
                
             case 1:
                 levelLoad(gameState);
-                System.out.println(gameState + " " + Scene.chapterScreen);
+                if (battleWon){
+                    gameState++;
+                }
                 break;
                 
             case 2:
                 battleWon = false;
-                System.out.println(gameState + " " + Scene.chapterScreen);
+                setup();
                 levelLoad(gameState);
+                if (battleWon){
+                    gameState++;
+                }
                 break;
             case 3:
                 battleWon = false;
-                System.out.println(gameState + " " + Scene.chapterScreen);
+                setup();
                 levelLoad(gameState);
+                if (battleWon){
+                    gameState++;
+                }
                 break;
                 
             case 4:
                 battleWon = false;
-                System.out.println(gameState + " " + Scene.chapterScreen);
+                setup();
                 levelLoad(gameState);
+                if (battleWon){
+                    gameState++;
+                }
                 break;
             case 5: 
                 // ending  
@@ -182,7 +201,6 @@ public class MySketch extends PApplet{
         }
         else if (combat){
             background(255);
-            setup();
             Battle battle = new Battle();
             battle.BattleStart(player, projectiles, entities, (Bosses) boss, keyPressed);
         } 
@@ -196,9 +214,7 @@ public class MySketch extends PApplet{
                 Scene.chapterScreen = gameState; 
             }
         }
-        else if (battleWon){
-            gameState++;
-        }
+        
     }
 }
 
