@@ -49,9 +49,6 @@ public class MySketch extends PApplet{
             scene = new Scene(this);
             boss = new Bosses(this, 545, 51, 200, 400, 300, "images/demon1.png");
             ((Bosses) boss).currentBossHealth = 300;
-            for (int i = 0; i < 10; i++){
-                projectiles.add(new Projectile(this, rand.nextInt(700, 800), rand.nextInt(100,300), 20, 20, false, rand.nextInt(-1,1), "images/projectile.png"));
-            }
 
             for (int i = 0; i < 5; i++){
                 entities.add(new Enemy(this, rand.nextInt(351) + 350, 292, 20, 50, rand.nextInt(1,3), "images/enemy.png", false));
