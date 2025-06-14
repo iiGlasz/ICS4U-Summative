@@ -21,11 +21,11 @@ public class Bosses extends Entity{
     private PImage image;
     
     // attack related variables
-    private ArrayList<Projectile> projectiles;
+    public ArrayList<Projectile> projectiles;
     private int [][] projectilePattern; // [row][column]
     
     private int patternStep = 0;
-    private int patternCooldown = 240; // delay between steps
+    private int patternCooldown = 180; // delay between steps
     private int stepCounter = 0;
     
     
@@ -57,21 +57,22 @@ public class Bosses extends Entity{
             if (patternStep < projectilePattern.length){
                 for (int i = 0; i < projectilePattern[patternStep].length; i++){
                     if (projectilePattern[patternStep][i] == 1){
-                        // Create projectile depending on column index
-                        int projX = this.x + i * 50; // spread them out
-                        int projY = this.y + this.height;
-                        projectiles.add(new Projectile(app, rand.nextInt(501, 780), rand.nextInt(100,300), 20, 20, false, rand.nextInt(-1,1), "images/projectile.png"));
+                        projectiles.add(new Projectile(app, rand.nextInt(501, 780), rand.nextInt(150,300), 20, 20, false, rand.nextInt(-1,1), "images/projectile.png"));
                     }
                 }
                 patternStep++;
             } else {
-                patternStep = 0; // Loop or stop, depending on your design
+                //loops the attack pattern
+                patternStep = 0; 
             }
         }
         // draw the projectiles
         for (Projectile p : projectiles){
-            if (!p.used)
-            p.drawGravity();  
+            if (!p.used && patternStep % 2 == 0)
+                p.drawGravity(); 
+            else if (!p.used)
+                p.drawStraight();
+
             if (player.isCollidingWith(p) && !p.used && !player.isInvincible){
                player.takeDamage();
                p.used = true; 

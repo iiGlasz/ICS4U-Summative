@@ -5,17 +5,21 @@
 package myfirstsketch;
 import processing.core.PApplet;
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  *
  * @author ljphi
  */
 public class Battle extends PApplet{
+     Random rand = new Random();
     
     public Battle(){
     }
 
-    public void BattleStart(Player player, ArrayList<Projectile> projectiles, ArrayList<Entity> entities, Bosses boss, boolean keyPressed){
+    public void BattleStart(Player player, ArrayList<Entity> entities, Bosses boss, boolean keyPressed){
+        
+            
             TeamMembers.buffs(player);
             boss.draw(player);
             if (boss.currentBossHealth > 0){
@@ -38,7 +42,7 @@ public class Battle extends PApplet{
                 }
             }
 
-           for (Projectile p: projectiles){
+           for (Projectile p: boss.projectiles){
                 if (player.isCollidingWith(p) && !p.used && !player.isInvincible){
                    player.takeDamage();
                    p.used = true; 
@@ -48,9 +52,10 @@ public class Battle extends PApplet{
            for (Entity e: entities){
                 if (player.entityColiision(e) && !e.used && !player.isInvincible){
                    player.takeDamage();
+                   
                }
            }
            // draw player last so it's on top
-            player.draw(projectiles, entities);
+            player.draw(boss.projectiles, entities);
         }
     }

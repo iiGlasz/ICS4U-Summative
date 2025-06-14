@@ -5,6 +5,7 @@
 package myfirstsketch;
 
 import processing.core.PApplet;
+import processing.core.PImage;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -14,7 +15,6 @@ import java.util.Random;
  */
 public class MySketch extends PApplet{
     public Player player;
-    public ArrayList<Projectile> projectiles = new ArrayList <Projectile>();  
     public ArrayList<Entity> entities = new ArrayList <Entity>(); 
     private Scene scene;
     public Entity boss;
@@ -32,17 +32,52 @@ public class MySketch extends PApplet{
     
     boolean resetStage = true;
     
+    PImage backgroundImage1;
+    PImage backgroundImage2;
+    PImage backgroundImage3;
+    PImage backgroundImage4;
+
+    
+    
+    
     
     
     public void settings(){
         size(800,400);
+        backgroundImage1 = loadImage("images/background1.png");
+        backgroundImage2 = loadImage("images/background2.png");
+        backgroundImage3 = loadImage("images/background3.png");
+//        backgroundImage4 = loadImage("images/background4.png");
     }
     
     public void setup(){
-        background(255);
+        background(0);
+        // select the background depending on the chapter
+//        switch (gameState){
+//                case 1:
+//                    image(backgroundImage1, 0,40, 800,400);
+//                case 2:
+//                    image(backgroundImage2, 0,40, 800,400);
+//                case 3:
+//                    System.out.println("xd");
+//                    image(backgroundImage3, 0,40, 800,400);
+////                    
+////                case 4:
+////                    image(backgroundImage4, 0,40, 800,400);
+//        
+//        }
+        if (gameState == 1){
+            image(backgroundImage1, 0,40, 800,400);
+        }
+        if (gameState == 2){
+            image(backgroundImage2, 0,40, 800,400);
+        }
+        if (gameState == 3){
+            image(backgroundImage3, 0,40, 800,400);
+        }
         if (resetStage){
             // clear ArrayLists each stage
-            projectiles.clear();
+
             entities.clear();
             // reset all the states of the things on screen
             player = new Player(this, 100, 100, "images/wukong/wukong-idle-right.png", "images/wukong/attack.png");
@@ -56,6 +91,8 @@ public class MySketch extends PApplet{
 
             entities.add(boss);
             resetStage = false;
+            
+            
         }
     }
     
@@ -71,6 +108,7 @@ public class MySketch extends PApplet{
                 break;
                
             case 1:
+                
                 levelLoad(gameState);
                 if (battleWon){
                     gameState++;
@@ -197,9 +235,9 @@ public class MySketch extends PApplet{
             }
         }
         else if (combat){
-            background(255);
+            setup();
             Battle battle = new Battle();
-            battle.BattleStart(player, projectiles, entities, (Bosses) boss, keyPressed);
+            battle.BattleStart(player, entities, (Bosses) boss, keyPressed);
         } 
         // death, then reset the player
         else if (player.health == 0 && !combat){
@@ -212,6 +250,24 @@ public class MySketch extends PApplet{
             }
         }
         
+    }
+    
+    public void resetStage(){
+        // clear ArrayLists each stage
+        entities.clear();
+        // reset all the states of the things on screen
+        player = new Player(this, 100, 100, "images/wukong/wukong-idle-right.png", "images/wukong/attack.png");
+        scene = new Scene(this);
+        boss = new Bosses(this, 545, 51, 200, 400, 300, "images/demon1.png");
+        ((Bosses) boss).currentBossHealth = 300;
+
+        for (int i = 0; i < 5; i++){
+            entities.add(new Enemy(this, rand.nextInt(351) + 350, 292, 20, 50, rand.nextInt(1,3), "images/enemy.png", false));
+        }
+
+        entities.add(boss);
+        resetStage = false;
+            
     }
 }
 
