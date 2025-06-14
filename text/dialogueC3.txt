@@ -1,0 +1,8 @@
+A demon offers to teleport you directly to the final trial. Do you accept?
+///////////////
+Accept – Skip to the Heavenly Test. Become corrupted, but gain increased damage.
+Decline - 2 more choices.
+///////////////
+Sneak past the demon - Avoid combat with the demon.
+Fight the demon – Engage in battle.
+

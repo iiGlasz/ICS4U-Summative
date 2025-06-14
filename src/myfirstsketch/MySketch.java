@@ -39,6 +39,10 @@ public class MySketch extends PApplet{
     PImage enemyImage;
     String bossImage;
     
+    int combatStartTime = 0;
+    int combatEndTime = 0;
+    boolean checkTime = true;
+    
     
     public void settings(){
         size(800,400);
@@ -47,7 +51,7 @@ public class MySketch extends PApplet{
     public void setup(){
         background(0);
         // se;t up the objects on the screen
-        enemyImage = loadImage("images/enemy.png");
+        enemyImage = loadImage("images/enemies/enemy.png");
         player = new Player(this, 100, 250, "images/wukong/wukong-idle-right.png", "images/wukong/attack.png");
         scene = new Scene(this);
         
@@ -73,14 +77,89 @@ public class MySketch extends PApplet{
                 break;
                
             case 1:
-                bossImage = "images/demon1.png";
+                // choose the correct boss image
+                bossImage = "images/enemies/demon1.png";
+                // load the level
                 levelLoad(gameState);
+                
+                // check the user's choice in the dialogue
                 if (choice1){
-                    player.discipline++;
+                    Player.discipline++;
                     choice1 = false;
                 }
                 else if(choice2){
-                    player.discipline--;
+                    Player.discipline--;
+                    combatStartTime = millis();
+                    System.out.println(millis());
+                    choice2 = false;
+                }
+                
+                // reset the stage if needed
+                if (resetStage){
+                    resetStage();
+                }
+                // when the battle is won, up the gamestate
+                if (battleWon){
+                    gameState++;
+                }
+                break;
+                
+            case 2:
+                if (checkTime){
+                    combatEndTime = millis();
+                    checkTime = false;
+                }
+                bossImage = "images/enemies/demon2.png";
+                battleWon = false;
+                levelLoad(gameState);
+                
+                if (choice1){
+                    Player.discipline++;
+                    TeamMembers.pigsy = true;
+                    TeamMembers.sandy = true;
+                    choice1 = false;
+                }
+                else if(choice2){
+                    choice2 = false;
+                }
+                
+                if (resetStage){
+                    resetStage();
+                }
+                
+                if (battleWon){
+                    gameState++;
+                }
+                
+                
+                
+                break;
+            case 3:
+                bossImage = "images/enemies/demon3.png";
+                battleWon = false;
+                levelLoad(gameState);
+                
+                
+                if (choice1 && Scene.dialogueState == 0){
+                    Player.damage = 30;
+                    scene.chapterScreen = 5;
+                    gameState = 5;
+                    choice1 = false;
+                }
+                else if (choice2 && Scene.dialogueState == 0){
+                    Scene.dialogueState++;
+                    choice2 = false;
+                }
+                
+                else if (choice1 && Scene.dialogueState == 1){
+                    Player.discipline++;
+                    scene.chapterScreen = 4;
+                    gameState = 4;
+                    choice1 = false;
+                }
+                else if (choice2 && Scene.dialogueState == 1){
+                    Player.discipline--;
+                    combat = true;
                     choice2 = false;
                 }
                 
@@ -88,49 +167,54 @@ public class MySketch extends PApplet{
                 if (resetStage){
                     resetStage();
                 }
-                if (battleWon){
-                    gameState++;
-                }
-                break;
                 
-            case 2:
-                bossImage = "images/demon2.png";
-                battleWon = false;
-                if (resetStage){
-                    resetStage();
-                }
-                levelLoad(gameState);
-                if (battleWon){
-                    gameState++;
-                }
-                break;
-            case 3:
-                bossImage = "images/demon3.png";
-                battleWon = false;
-                if (resetStage){
-                    resetStage();
-                }
-                levelLoad(gameState);
                 if (battleWon){
                     gameState++;
                 }
                 break;
                 
             case 4:
-                bossImage = "images/demon4.png";
+                Scene.dialogueState = 0;
+                bossImage = "images/enemies/demon4.png";
                 battleWon = false;
+                levelLoad(gameState);
+                
+                if (choice1){
+                    Player.discipline++;
+                    scene.chapterScreen = 5;
+                    gameState = 5;
+                    
+                    choice1 = false;
+                }
+                    
+                else if (choice2){
+                    Player.discipline--;
+                    choice2 = false;
+                }
+                        
+                        
+                else if (choice3){
+                    scene.chapterScreen = 5;
+                    gameState++;
+                    choice3 = false; 
+                        
+                }
+                
                 if (resetStage){
                     resetStage();
                 }
-                levelLoad(gameState);
+                
                 if (battleWon){
                     gameState++;
                 }
                 break;
             case 5: 
-                bossImage = "images/demon5.png";
                 // heavenly test  
+                bossImage = "images/enemies/demon5.png";
                 battleWon = false;
+                dialogue = false;
+                combat = true;
+                
                 if (resetStage){
                     resetStage();
                 }
@@ -141,6 +225,7 @@ public class MySketch extends PApplet{
                 break;
                 
             case 6:
+                scene.drawEnding();
                 //ending
         }
         
@@ -231,11 +316,16 @@ public class MySketch extends PApplet{
         else if (dialogue){
             button1.setInUse();
             button2.setInUse();
-            //button3.setInUse();
-            
-            
+            if (gameState == 4)
+                button3.setInUse();
+
             scene.drawBackground();
             scene.drawDialogue(gameState);
+            
+            if (Player.discipline <= 0 && gameState == 2){
+                dialogue = false;
+                combat = true;
+            }
             
 
         }
@@ -244,6 +334,9 @@ public class MySketch extends PApplet{
             button2.setFalse();
             button3.setFalse();
             scene.drawBackground();
+            
+            
+            
             Battle battle = new Battle();
             battle.BattleStart(player, entities, (Bosses) boss, keyPressed);
         } 
@@ -265,13 +358,13 @@ public class MySketch extends PApplet{
         // reset all the states of the things on screen
         player = new Player(this, 100, 250, "images/wukong/wukong-idle-right.png", "images/wukong/attack.png");
         scene = new Scene(this);
-        if (bossImage == "images/demon1.png")
+        if (bossImage == "images/enemies/demon1.png")
             boss = new Bosses(this, 545, 51, 200, 400, 300, bossImage);
-        else if (bossImage == "images/demon2.png")
+        else if (bossImage == "images/enemies/demon2.png")
             boss = new Bosses(this, 565, 62, 200, 400, 300, bossImage);
-        else if (bossImage == "images/demon3.png")
+        else if (bossImage == "images/enemies/demon3.png")
             boss = new Bosses(this, 545, 92, 200, 400, 300, bossImage);
-        else if (bossImage == "images/demon4.png")
+        else if (bossImage == "images/enemies/demon4.png")
             boss = new Bosses(this, 545, 120, 200, 400, 300, bossImage);   
         else
             boss = new Bosses(this, 520, 160, 200, 400, 300, bossImage);  
@@ -280,7 +373,7 @@ public class MySketch extends PApplet{
         ((Bosses) boss).currentBossHealth = 300;
 
         for (int i = 0; i < 8; i++){
-            entities.add(new Enemy(this, rand.nextInt(351) + 350, 292, 20, 50, rand.nextInt(1,3), "images/enemy.png", false));
+            entities.add(new Enemy(this, rand.nextInt(351) + 350, 292, 20, 50, rand.nextInt(1,3), "images/enemies/enemy.png", false));
         }
 
         entities.add(boss);
@@ -295,8 +388,16 @@ public class MySketch extends PApplet{
             choice1 = true;
         } 
         else if (button2.isClicked(mouseX, mouseY)){
-            dialogue = false;
-            combat = true;
+            // if statement for chapter 3 
+            if (Scene.dialogueState == 1){
+                dialogue = false;
+                combat = true;
+            }
+            else if (gameState != 3){
+                dialogue = false;
+                combat = true;
+            }
+            
             choice2 = true;
         }
         else if (button3.isClicked(mouseX, mouseY)){

@@ -57,7 +57,7 @@ public class Bosses extends Entity{
             if (patternStep < projectilePattern.length){
                 for (int i = 0; i < projectilePattern[patternStep].length; i++){
                     if (projectilePattern[patternStep][i] == 1){
-                        projectiles.add(new Projectile(app, rand.nextInt(501, 780), rand.nextInt(150,300), 20, 20, false, rand.nextInt(-1,1), "images/projectile.png"));
+                        projectiles.add(new Projectile(app, rand.nextInt(501, 780), rand.nextInt(150,300), 20, 20, false, rand.nextInt(-1,1), "images/enemies/projectile.png"));
                     }
                 }
                 patternStep++;

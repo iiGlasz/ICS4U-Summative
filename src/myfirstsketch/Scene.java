@@ -17,7 +17,6 @@ import java.util.ArrayList;
  */
 public class Scene {
     public static int chapterScreen = 0;
-    public static boolean levelClear;
     private static PApplet app;
     private int fillHeight;
     private boolean fillingScreen;
@@ -26,7 +25,7 @@ public class Scene {
     
     ArrayList<String> lines = new ArrayList<String>();
     
-    
+    public static int dialogueState = 0;
     
     PImage backgroundImage1;
     PImage backgroundImage2;
@@ -34,18 +33,19 @@ public class Scene {
     PImage backgroundImage4;
     PImage backgroundImage5;
     
+    PImage endingScreen;
+    
     public Scene (PApplet p){
         this.app = p;
-        this.levelClear = false;
         this.fillingScreen = false;
         this.hasBeenFilled = false;
         this.fillHeight = 0;
         this.fillSpeed = 8;
-        this.backgroundImage1 = app.loadImage("images/background1.png");
-        this.backgroundImage2 = app.loadImage("images/background2.png");
-        this.backgroundImage3 = app.loadImage("images/background3.png");
-        this.backgroundImage4 = app.loadImage("images/background4.png");
-        this.backgroundImage5 = app.loadImage("images/background5.png");
+        this.backgroundImage1 = app.loadImage("images/backgrounds/background1.png");
+        this.backgroundImage2 = app.loadImage("images/backgrounds/background2.png");
+        this.backgroundImage3 = app.loadImage("images/backgrounds/background3.png");
+        this.backgroundImage4 = app.loadImage("images/backgrounds/background4.png");
+        this.backgroundImage5 = app.loadImage("images/backgrounds/background5.png");
     }
     
     public void drawDialogue(int gameState){
@@ -57,7 +57,7 @@ public class Scene {
 //        app.rect(40, 320, 720, 25);
 //        app.rect(40, 360, 720, 25);
         
-        int dialogueState = 0;
+        
         
         switch (gameState){
             case 1:
@@ -77,6 +77,90 @@ public class Scene {
                 app.text(lines.get(3), 400, 297);
                 app.text(lines.get(4), 400, 337);
                 break;
+                
+            case 2:
+                
+                fileTextReader("text/dialogueC2.txt");
+                // player options
+                app.fill(160,80,0);
+                app.rect(40, 280, 720, 25);
+                app.rect(40, 320, 720, 25);
+                // chapter text
+                app.fill(255);
+                app.textSize(18);
+
+                app.text(lines.get(0), 400, 215);
+
+                app.text(lines.get(2), 400, 297);
+
+                app.text(lines.get(3), 400, 337);
+                
+                break;
+                
+            case 3:
+                fileTextReader("text/dialogueC3.txt");
+                if (dialogueState == 0){
+                // player options
+                app.fill(160,80,0);
+                app.rect(40, 280, 720, 25);
+                app.rect(40, 320, 720, 25);
+                
+                // chapter text
+                app.fill(255);
+                app.textSize(18);
+                
+                app.text(lines.get(0), 400, 215);
+                
+                app.text(lines.get(2), 400, 297);
+                
+                app.text(lines.get(3), 400, 337);
+                }
+                else if (dialogueState == 1){
+                    app.fill(150,75,0);
+                    app.rect(20, 180, 760, 215);
+                    
+                    // player options
+                    app.fill(160,80,0);
+                    app.rect(40, 280, 720, 25);
+                    app.rect(40, 320, 720, 25);
+
+                    // chapter text
+                    app.fill(255);
+                    app.textSize(18);
+
+                    app.text(lines.get(5), 400, 297);
+
+                    app.text(lines.get(6), 400, 337);
+                    
+                    
+                    
+                }
+                break;
+                
+            case 4:
+                fileTextReader("text/dialogueC4.txt");
+                // player options
+                app.fill(160,80,0);
+                app.rect(40, 280, 720, 25);
+                app.rect(40, 320, 720, 25);
+                app.rect(40, 360, 720, 25);
+                
+                // chapter text
+                app.fill(255);
+                app.textSize(18);
+                
+                app.text(lines.get(0), 400, 215);
+                app.text(lines.get(1), 400, 245);
+                
+                app.text(lines.get(3), 400, 297);
+                app.text(lines.get(4), 400, 337);
+                app.text(lines.get(5), 400, 377);
+                break;
+            
+//            case 5:
+//                fileTextReader("text/dialogueC5.txt");
+//                break;
+
         }
     }
     
@@ -124,6 +208,40 @@ public class Scene {
                 hasBeenFilled = true;   
             }
         }
+    }
+    
+    public void drawEnding(){
+        String endingType;
+        // aggression ending
+        if (Player.discipline == -3){
+            this.endingScreen = app.loadImage("images/endings/wukongAggression.png");
+            endingType = "Aggression Ending";
+        }
+        // corrupted ending
+        else if (Player.damage == 30){
+            this.endingScreen = app.loadImage("images/endings/wukongCorrupted.png");
+            endingType = "Corruption Ending";
+        }
+        // true enlightenment ending
+        else if (Player.discipline == 4){
+            this.endingScreen = app.loadImage("images/endings/wukongHeavenly.png");
+            endingType = "True Enlighenment Ending";
+        }
+        // neutral ending
+        else {
+            this.endingScreen = app.loadImage("images/endings/wukongNeutral.png");
+            endingType = "Neutral Ending";
+        }
+        app.image(endingScreen, 0, 0);
+        app.fill(0);
+        app.rect(0, 0, 200, 400);
+        app.fill(255);
+        app.textSize(20);
+        app.text("Thanks for Playing!", 100, 150);
+        app.text(endingType, 100, 220);
+        
+        
+        
     }
     
     public void drawChapterScreen(){

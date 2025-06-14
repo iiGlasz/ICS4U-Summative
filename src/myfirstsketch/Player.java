@@ -15,7 +15,7 @@ public class Player extends MySketch{
     // combat variables & stats
     public static int max_Health = 5;
     public int health = 5;
-    public int discipline = 0;
+    public static int discipline = 0;
     public int healthPots = 3;
     
     // drawing variables
@@ -44,7 +44,7 @@ public class Player extends MySketch{
     private int attackDuration = 10; // 0.16s
     
     public boolean canAttack = true;
-    public int damage = 300;
+    public static int damage = 300;
     private int cooldownTimer = 0;
     private int cooldownDuration = 20; // .33s
     

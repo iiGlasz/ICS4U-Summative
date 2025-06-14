@@ -1,0 +1,4 @@
+Pigsy and Sandy offer to join the journey. Do you accept?
+///////////////
+Accept – Pigsy and Sandy join your team, offering healing and damage buffs.
+Decline – You continue solo, keeping all combat focused on Wukong alone.
