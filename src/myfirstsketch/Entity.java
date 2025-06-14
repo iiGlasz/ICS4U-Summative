@@ -28,14 +28,14 @@ public class Entity{
         this.image = app.loadImage(imagePath);
     }
     
-    public Entity(PApplet p, int x, int y, int width, int height, int speed, String imagePath, boolean used){
+    public Entity(PApplet p, int x, int y, int width, int height, int speed, String imagePath, boolean used){ //String imagePath
         this.app = p;
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
         this.speed = speed;
-        this.image = app.loadImage(imagePath);
+        this.image = app.loadImage("images/enemy.png");
         this.used = false;
     }
     

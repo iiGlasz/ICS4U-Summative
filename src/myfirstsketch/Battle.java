@@ -18,18 +18,20 @@ public class Battle extends PApplet{
     }
 
     public void BattleStart(Player player, ArrayList<Entity> entities, Bosses boss, boolean keyPressed){
-        
+            
             
             TeamMembers.buffs(player);
             boss.draw(player);
+            
             if (boss.currentBossHealth > 0){
                 boss.attackPattern(player);
             }
             for (Entity e : entities){
-                if (!e.used)
-                    e.draw(player);
-                else if (e instanceof Bosses){
+                if (e instanceof Bosses){
                     e.used = false;
+                }
+                else if (!e.used){
+                    e.draw(player);
                 }
             }
 

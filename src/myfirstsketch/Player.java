@@ -44,7 +44,7 @@ public class Player extends MySketch{
     private int attackDuration = 10; // 0.16s
     
     public boolean canAttack = true;
-    public int damage = 100;
+    public int damage = 300;
     private int cooldownTimer = 0;
     private int cooldownDuration = 20; // .33s
     
@@ -166,27 +166,27 @@ public class Player extends MySketch{
         
         // draw a health bar rectangle with sectioned parts
         app.fill(0,255,0);
-        app.rect (20, 30, 10, 80);
-        app.rect (20, 30, 10, 64);
-        app.rect (20, 30, 10, 48);
-        app.rect (20, 30, 10, 32);
-        app.rect (20, 30, 10, 16); 
+        app.rect (20, 40, 10, 80);
+        app.rect (20, 40, 10, 64);
+        app.rect (20, 40, 10, 48);
+        app.rect (20, 40, 10, 32);
+        app.rect (20, 40, 10, 16); 
         
         // replace healthbar with red depending on health
         app.fill(255,0,0);
         switch (health){
             case -1:
-                app.rect (20, 30, 10, 80);
+                app.rect (20, 40, 10, 80);
             case 0:
-                app.rect (20, 30, 10, 80);
+                app.rect (20, 40, 10, 80);
             case 1:
-                app.rect (20, 30, 10, 64);
+                app.rect (20, 40, 10, 64);
             case 2:
-                app.rect (20, 30, 10, 48);
+                app.rect (20, 40, 10, 48);
             case 3:
-                app.rect (20, 30, 10, 32);
+                app.rect (20, 40, 10, 32);
             case 4:
-               app.rect (20, 30, 10, 16); 
+               app.rect (20, 40, 10, 16); 
         }
         
         // jumping mechanics
@@ -215,8 +215,8 @@ public class Player extends MySketch{
         if (isAttacking){
             int attackX = playerX + width - 15;
             int attackY = playerY + 6;
-            int attackW = 40;
-            int attackH = 50;
+            int attackW = 400;
+            int attackH = 500;
             
             // switch the direction of the attack based on the direction the player is moving
             if (facingLeft){

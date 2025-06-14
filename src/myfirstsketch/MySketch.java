@@ -26,74 +26,29 @@ public class MySketch extends PApplet{
     
     // variables to switch between parts of the game
     public static boolean combat = false;
+    public static boolean dialogue = false;
     public static int gameState = 0;
     public static boolean canPressEnter = true;
     public static boolean battleWon = false;
     
     boolean resetStage = true;
     
-    PImage backgroundImage1;
-    PImage backgroundImage2;
-    PImage backgroundImage3;
-    PImage backgroundImage4;
-
-    
-    
-    
+    PImage enemyImage;
+    String bossImage;
     
     
     public void settings(){
         size(800,400);
-        backgroundImage1 = loadImage("images/background1.png");
-        backgroundImage2 = loadImage("images/background2.png");
-        backgroundImage3 = loadImage("images/background3.png");
-//        backgroundImage4 = loadImage("images/background4.png");
     }
     
     public void setup(){
         background(0);
-        // select the background depending on the chapter
-//        switch (gameState){
-//                case 1:
-//                    image(backgroundImage1, 0,40, 800,400);
-//                case 2:
-//                    image(backgroundImage2, 0,40, 800,400);
-//                case 3:
-//                    System.out.println("xd");
-//                    image(backgroundImage3, 0,40, 800,400);
-////                    
-////                case 4:
-////                    image(backgroundImage4, 0,40, 800,400);
-//        
-//        }
-        if (gameState == 1){
-            image(backgroundImage1, 0,40, 800,400);
-        }
-        if (gameState == 2){
-            image(backgroundImage2, 0,40, 800,400);
-        }
-        if (gameState == 3){
-            image(backgroundImage3, 0,40, 800,400);
-        }
-        if (resetStage){
-            // clear ArrayLists each stage
-
-            entities.clear();
-            // reset all the states of the things on screen
-            player = new Player(this, 100, 100, "images/wukong/wukong-idle-right.png", "images/wukong/attack.png");
-            scene = new Scene(this);
-            boss = new Bosses(this, 545, 51, 200, 400, 300, "images/demon1.png");
-            ((Bosses) boss).currentBossHealth = 300;
-
-            for (int i = 0; i < 5; i++){
-                entities.add(new Enemy(this, rand.nextInt(351) + 350, 292, 20, 50, rand.nextInt(1,3), "images/enemy.png", false));
-            }
-
-            entities.add(boss);
-            resetStage = false;
-            
-            
-        }
+        // se;t up the objects on the screen
+        enemyImage = loadImage("images/enemy.png");
+        player = new Player(this, 100, 250, "images/wukong/wukong-idle-right.png", "images/wukong/attack.png");
+        scene = new Scene(this);
+        
+        entities.add(boss);
     }
     
     public void draw(){
@@ -108,24 +63,33 @@ public class MySketch extends PApplet{
                 break;
                
             case 1:
-                
+                bossImage = "images/demon1.png";
                 levelLoad(gameState);
+                if (resetStage){
+                    resetStage();
+                }
                 if (battleWon){
                     gameState++;
                 }
                 break;
                 
             case 2:
+                bossImage = "images/demon2.png";
                 battleWon = false;
-                setup();
+                if (resetStage){
+                    resetStage();
+                }
                 levelLoad(gameState);
                 if (battleWon){
                     gameState++;
                 }
                 break;
             case 3:
+                bossImage = "images/demon3.png";
                 battleWon = false;
-                setup();
+                if (resetStage){
+                    resetStage();
+                }
                 levelLoad(gameState);
                 if (battleWon){
                     gameState++;
@@ -133,15 +97,31 @@ public class MySketch extends PApplet{
                 break;
                 
             case 4:
+                bossImage = "images/demon4.png";
                 battleWon = false;
-                setup();
+                if (resetStage){
+                    resetStage();
+                }
                 levelLoad(gameState);
                 if (battleWon){
                     gameState++;
                 }
                 break;
             case 5: 
-                // ending  
+                bossImage = "images/demon5.png";
+                // heavenly test  
+                battleWon = false;
+                if (resetStage){
+                    resetStage();
+                }
+                levelLoad(gameState);
+                if (battleWon){
+                    gameState++;
+                }
+                break;
+                
+            case 6:
+                //ending
         }
         
        
@@ -230,12 +210,16 @@ public class MySketch extends PApplet{
             if (keyCode == ENTER && canPressEnter){
                 canPressEnter = false;
                 resetStage = true;
+                dialogue = true;
                 Scene.chapterScreen++;
-                combat = true;
+                
             }
         }
+        else if (dialogue){
+            scene.drawBackground();
+            scene.drawDialogue(gameState);
+        }
         else if (combat){
-            setup();
             Battle battle = new Battle();
             battle.BattleStart(player, entities, (Bosses) boss, keyPressed);
         } 
@@ -249,26 +233,37 @@ public class MySketch extends PApplet{
                 Scene.chapterScreen = gameState; 
             }
         }
-        
     }
     
     public void resetStage(){
         // clear ArrayLists each stage
         entities.clear();
         // reset all the states of the things on screen
-        player = new Player(this, 100, 100, "images/wukong/wukong-idle-right.png", "images/wukong/attack.png");
+        player = new Player(this, 100, 250, "images/wukong/wukong-idle-right.png", "images/wukong/attack.png");
         scene = new Scene(this);
-        boss = new Bosses(this, 545, 51, 200, 400, 300, "images/demon1.png");
+        if (bossImage == "images/demon1.png")
+            boss = new Bosses(this, 545, 51, 200, 400, 300, bossImage);
+        else if (bossImage == "images/demon2.png")
+            boss = new Bosses(this, 565, 62, 200, 400, 300, bossImage);
+        else if (bossImage == "images/demon3.png")
+            boss = new Bosses(this, 545, 92, 200, 400, 300, bossImage);
+        else if (bossImage == "images/demon4.png")
+            boss = new Bosses(this, 545, 120, 200, 400, 300, bossImage);   
+        else
+            boss = new Bosses(this, 520, 160, 200, 400, 300, bossImage);  
+                    
+                    
         ((Bosses) boss).currentBossHealth = 300;
 
-        for (int i = 0; i < 5; i++){
+        for (int i = 0; i < 8; i++){
             entities.add(new Enemy(this, rand.nextInt(351) + 350, 292, 20, 50, rand.nextInt(1,3), "images/enemy.png", false));
         }
 
         entities.add(boss);
         resetStage = false;
-            
     }
+    
+   
 }
 
 

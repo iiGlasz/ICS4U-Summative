@@ -11,8 +11,11 @@ import processing.core.PImage;
  */
 public class Enemy extends Entity{
     
-    public Enemy(PApplet p, int x, int y, int width, int height, int speed, String imagePath, boolean used){ //, String imagePath
+    private PImage image;
+    
+    public Enemy(PApplet p, int x, int y, int width, int height, int speed, String imagePath, boolean used){ 
         super(p, x, y, width, height, speed, imagePath, used);
+
 //        this.image = app.loadImage(imagePath);
     }
     
