@@ -15,7 +15,7 @@ public class Player extends MySketch{
     // combat variables & stats
     public static int max_Health = 5;
     public int health = 5;
-    private int discipline = 0;
+    public int discipline = 0;
     public int healthPots = 3;
     
     // drawing variables

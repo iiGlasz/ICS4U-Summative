@@ -18,6 +18,8 @@ public class MySketch extends PApplet{
     public ArrayList<Entity> entities = new ArrayList <Entity>(); 
     private Scene scene;
     public Entity boss;
+    
+    private Button button1, button2, button3;
     Random rand = new Random();
     
     // variables for the player
@@ -32,6 +34,7 @@ public class MySketch extends PApplet{
     public static boolean battleWon = false;
     
     boolean resetStage = true;
+    boolean choice1, choice2, choice3 = false;
     
     PImage enemyImage;
     String bossImage;
@@ -47,6 +50,13 @@ public class MySketch extends PApplet{
         enemyImage = loadImage("images/enemy.png");
         player = new Player(this, 100, 250, "images/wukong/wukong-idle-right.png", "images/wukong/attack.png");
         scene = new Scene(this);
+        
+        button1 = new Button(this, 40, 280, 720, 25);
+        button2 = new Button(this, 40, 320, 720, 25);
+        button3 = new Button(this, 40, 360, 720, 25);
+                
+        
+                
         
         entities.add(boss);
     }
@@ -65,6 +75,16 @@ public class MySketch extends PApplet{
             case 1:
                 bossImage = "images/demon1.png";
                 levelLoad(gameState);
+                if (choice1){
+                    player.discipline++;
+                    choice1 = false;
+                }
+                else if(choice2){
+                    player.discipline--;
+                    choice2 = false;
+                }
+                
+                
                 if (resetStage){
                     resetStage();
                 }
@@ -196,13 +216,7 @@ public class MySketch extends PApplet{
 
     }
     
-//    public void mousePressed(){
-//        if (person1.isClicked(mouseX, mouseY)){
-//            showInfo = true;
-//        } else{
-//            showInfo = false;
-//        }
-//    }
+ 
     
     public void levelLoad(int gameState){
         if (Scene.chapterScreen == gameState){    
@@ -212,14 +226,24 @@ public class MySketch extends PApplet{
                 resetStage = true;
                 dialogue = true;
                 Scene.chapterScreen++;
-                
             }
         }
         else if (dialogue){
+            button1.setInUse();
+            button2.setInUse();
+            //button3.setInUse();
+            
+            
             scene.drawBackground();
             scene.drawDialogue(gameState);
+            
+
         }
         else if (combat){
+            button1.setFalse();
+            button2.setFalse();
+            button3.setFalse();
+            scene.drawBackground();
             Battle battle = new Battle();
             battle.BattleStart(player, entities, (Bosses) boss, keyPressed);
         } 
@@ -263,6 +287,24 @@ public class MySketch extends PApplet{
         resetStage = false;
     }
     
+    
+       public void mousePressed(){
+        if (button1.isClicked(mouseX, mouseY)){
+            dialogue = false;
+            combat = true;
+            choice1 = true;
+        } 
+        else if (button2.isClicked(mouseX, mouseY)){
+            dialogue = false;
+            combat = true;
+            choice2 = true;
+        }
+        else if (button3.isClicked(mouseX, mouseY)){
+            dialogue = false;
+            combat = true;
+            choice3 = true;
+        }
+    }
    
 }
 

@@ -3,9 +3,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package myfirstsketch;
+import static myfirstsketch.MySketch.gameState;
 import processing.core.PApplet;
 import static processing.core.PConstants.CENTER;
 import processing.core.PImage;
+import java.util.Scanner;
+import java.io.*;
+import java.util.ArrayList;
 
 /**
  *
@@ -19,6 +23,10 @@ public class Scene {
     private boolean fillingScreen;
     private boolean hasBeenFilled;
     private int fillSpeed;
+    
+    ArrayList<String> lines = new ArrayList<String>();
+    
+    
     
     PImage backgroundImage1;
     PImage backgroundImage2;
@@ -42,7 +50,34 @@ public class Scene {
     
     public void drawDialogue(int gameState){
         app.fill(150,75,0);
-        app.rect(20, 200, 760, 180);
+        app.rect(20, 180, 760, 215);
+        
+//        app.fill(160,80,0);
+//        app.rect(40, 280, 720, 25);
+//        app.rect(40, 320, 720, 25);
+//        app.rect(40, 360, 720, 25);
+        
+        int dialogueState = 0;
+        
+        switch (gameState){
+            case 1:
+                fileTextReader("text/dialogueC1.txt");
+                // player options
+                app.fill(160,80,0);
+                app.rect(40, 280, 720, 25);
+                app.rect(40, 320, 720, 25);
+                
+                // chapter text
+                app.fill(255);
+                app.textSize(18);
+                
+                app.text(lines.get(0), 400, 215);
+                app.text(lines.get(1), 400, 245);
+                
+                app.text(lines.get(3), 400, 297);
+                app.text(lines.get(4), 400, 337);
+                break;
+        }
     }
     
     public void drawBackground(){
@@ -92,64 +127,16 @@ public class Scene {
     }
     
     public void drawChapterScreen(){
-        switch (chapterScreen){
-                case 1:
-                    app.background(0);
-                    app.textAlign(CENTER);
-                    app.fill(255);
-                    app.textSize(40);
-                    app.text("Chapter 1", 400, 150);
+        app.background(0);
+        app.textAlign(CENTER);
+        app.fill(255);
+        app.textSize(40);
+        app.text("Chapter " + chapterScreen, 400, 150);
 
-                    app.textSize(24);
-                    app.text("Press ENTER to Start", 400, 250);
-
-                    break; 
-                case 2:
-                    app.background(0);
-                    app.textAlign(CENTER);
-                    app.fill(255);
-                    app.textSize(40);
-                    app.text("Chapter 2", 400, 150);
-
-                    app.textSize(24);
-                    app.text("Press ENTER to Start", 400, 250);
-
-                    break;
-                case 3:
-                    app.background(0);
-                    app.textAlign(CENTER);
-                    app.fill(255);
-                    app.textSize(40);
-                    app.text("Chapter 3", 400, 150);
-
-                    app.textSize(24);
-                    app.text("Press ENTER to Start", 400, 250);
-
-                    break;
-                case 4:
-                    app.background(255);
-                    app.textAlign(CENTER);
-                    app.fill(0);
-                    app.textSize(40);
-                    app.text("Chapter 4", 400, 150);
-
-                    app.textSize(24);
-                    app.text("Press ENTER to Start", 400, 250);
-
-                    break;  
-                case 5:
-                    app.background(0);
-                    app.textAlign(CENTER);
-                    app.fill(255);
-                    app.textSize(40);
-                    app.text("Chapter 5", 400, 150);
-
-                    app.textSize(24);
-                    app.text("Press ENTER to Start", 400, 250);
-
-                    break;  
-        }   
+        app.textSize(24);
+        app.text("Press ENTER to Start", 400, 250);
     }
+    
     public void drawMainMenu() {
         app.background(255);
         app.textAlign(CENTER);
@@ -159,10 +146,22 @@ public class Scene {
 
         app.textSize(24);
         app.text("Press ENTER to Start",400, 250);
-        
     }
     
-    
+    public void fileTextReader(String fileName){
+
+        lines.clear();
+        try {
+            File file = new File(fileName);
+            Scanner scanner = new Scanner(file);
+            while (scanner.hasNextLine()) {
+                lines.add(scanner.nextLine());
+            }
+            scanner.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found.");
+        }
+    }
 }
    
 
