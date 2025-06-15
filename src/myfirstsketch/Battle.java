@@ -11,9 +11,6 @@ import java.util.ArrayList;
  * @author ljphi
  */
 public class Battle extends PApplet{
-    
-    public Battle(){
-    }
 
     /**
      * Handles all of the player interactions and drawing of entities in every battle
@@ -22,7 +19,7 @@ public class Battle extends PApplet{
      * @param boss the boss object
      * @param keyPressed whether or not a key has been pressed
      */
-    public void BattleStart(Player player, ArrayList<Entity> entities, Bosses boss, boolean keyPressed){
+    public static void BattleStart(Player player, ArrayList<Entity> entities, Bosses boss, boolean keyPressed){
             // call the buffs from TeamMembers if they are active
             TeamMembers.buffs(player);
             // draw the boss

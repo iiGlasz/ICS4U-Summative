@@ -398,8 +398,7 @@ public class MySketch extends PApplet{
             scene.drawBackground();
             
             // start the battle
-            Battle battle = new Battle();
-            battle.BattleStart(player, entities, (Bosses) boss, keyPressed);
+            Battle.BattleStart(player, entities, (Bosses) boss, keyPressed);
         } 
         
         // death, then reset the player if they retry
