@@ -27,7 +27,7 @@ public class Battle extends PApplet{
             // call the buffs from TeamMembers if they are active
             TeamMembers.buffs(player);
             // draw the boss
-            boss.draw(player);
+            boss.draw();
             
             // if the boss is alive, make it attack
             if (boss.currentBossHealth > 0){
@@ -42,7 +42,7 @@ public class Battle extends PApplet{
                 }
                 // draw the entities if they are not dead
                 else if (!e.used){
-                    e.draw(player);
+                    e.draw();
                 }
             }
 
@@ -58,7 +58,7 @@ public class Battle extends PApplet{
 
            // loop through all the boss' projectiles and check if they hit the player
            for (Projectile p: boss.projectiles){
-                if (player.isCollidingWith(p) && !p.used && !player.isInvincible){
+                if (player.entityCollision(p) && !p.used && !player.isInvincible){
                    player.takeDamage();
                    p.used = true; 
                }
@@ -66,10 +66,9 @@ public class Battle extends PApplet{
            
            // check if the entities have hit the player
            for (Entity e: entities){
-                if (player.entityColiision(e) && !e.used && !player.isInvincible){
+                if (player.entityCollision(e) && !e.used && !player.isInvincible){
                    player.takeDamage();
-                   
-               }
+                }
            }
            // draw player last so it's on top
             player.draw(boss.projectiles, entities);

@@ -19,16 +19,8 @@ public class Entity{
     public boolean used;
     public boolean eCanBeHit;
     
+   
     // constructor
-//    public Entity(PApplet p, int x, int y, int width, int height, String imagePath){
-//        this.app = p;
-//        this.x = x;
-//        this.y = y;
-//        this.width = width;
-//        this.height = height;
-//        this.image = app.loadImage(imagePath);
-//    }
-    
     public Entity(PApplet p, int x, int y, int width, int height, int speed, String imagePath, boolean used){
         this.app = p;
         this.x = x;
@@ -40,14 +32,6 @@ public class Entity{
         this.used = false;
     }
     
-//    public Entity(PApplet p, int x, int y, int width, int height){
-//        this.app = p;
-//        this.x = x;
-//        this.y = y;
-//        this.width = width;
-//        this.height = height;
-//        this.eCanBeHit = true;
-//    }
     
     // constructor for the boss
     public Entity(PApplet p, int x, int y){
@@ -59,14 +43,13 @@ public class Entity{
     
     /**
      * Move the entity closer towards the player
-     * @param player player object
      */
-    public void move(Player player){
+    public void move(){
         // follow the player depending on their x position
-        if (this.x > player.playerX){
+        if (this.x > Player.playerX){
             x -= 2 * speed;
         }
-        else if (this.x < player.playerX){
+        else if (this.x < Player.playerX){
             x += 2 * speed;
         }
     }
@@ -75,10 +58,10 @@ public class Entity{
      * draws the entity and moves it towards the player
      * @param player player object
      */
-    public void draw(Player player){
+    public void draw(){
         app.fill(255, 0, 0);
         app.image(image, x, y);
-        this.move(player);
+        this.move();
     }
     
 

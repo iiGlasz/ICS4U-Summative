@@ -90,22 +90,20 @@ public class Bosses extends Entity{
                 p.drawGravity(); 
             // draw projectiles moving in a straight line
             else if (!p.used)
-               p.drawStraight();
+               p.draw();
             // if the projectile hits the player
-            if (player.isCollidingWith(p) && !p.used && !player.isInvincible){
+            if (player.entityCollision(p) && !p.used && !player.isInvincible){
                player.takeDamage();
                p.used = true; 
            }
         }
     }
   
-    // override since boss inherits from entity
     @Override
     /**
      * draws the boss and its health bar
-     * @param player
      */
-    public void draw(Player player){
+    public void draw(){
         // draw the boss
         app.fill(255, 0, 0);
         app.image(image, x, y);

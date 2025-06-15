@@ -11,10 +11,10 @@ import processing.core.PImage;
  *
  * @author ljphi
  */
-public class Projectile{
+public class Projectile extends Entity{
     // projectile variables
-    public int projX, projY;
-    public int pWidth, pHeight;
+//    public int x, y;
+//    public int pWidth, pHeight;
     private PImage image;
     private PApplet app;
     
@@ -25,56 +25,45 @@ public class Projectile{
     
     // constructor
     public Projectile(PApplet p, int x, int y, int width, int height, boolean used, int xSpeed, String imagePath){
+        super(p, x, y, width, height, xSpeed, imagePath, used);
         this.app = p;
-        this.projX = x;
-        this.projY = y;
-        this.pWidth = width;
-        this.pHeight = height;
-        this.used = used;
-        this.xSpeed = xSpeed;
         this.image = app.loadImage(imagePath);
+        this.xSpeed = xSpeed;
     }
     
+    @Override
     /**
-     * moves the projectile by its x-axis speed
+     * moves the projectile in x axis
      */
     public void move(){
-        projX += xSpeed;
-    }
-    
-    /**
-     * moves the projectile with projectile motion, x and y axis movement
-     */
-    public void moveGravity(){
-        projX += xSpeed;
-        ySpeed += GRAVITY;
-        projY += ySpeed;
+        x += xSpeed;
     }
     
     /**
      * draws the projectile with projectile motion
      */
     public void drawGravity(){
-        app.fill(255, 0, 0);
-        app.image(image, projX, projY);
-        this.moveGravity();
+        app.image(image, x, y);
+        ySpeed += GRAVITY;
+        y += ySpeed;
+        move();
     }
     
+    @Override
     /**
      * draws the projectile moving in a straight line
      */
-    public void drawStraight(){
-        app.fill(255, 0, 0);
-        app.image(image, projX, projY);
-        this.move();
+    public void draw(){
+        app.image(image, x, y);
+        move();
     }
     
     /**
      * draws the projectile falling down with gravity, no x axis movement
      */
     public void drawGravityNoX(){
-        app.fill(255, 0, 0);
-        app.image(image, projX, projY);
-        this.moveGravity();
+        app.image(image, x, y);
+        ySpeed += GRAVITY;
+        y += ySpeed;
     }
 }

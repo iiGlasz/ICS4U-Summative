@@ -19,8 +19,8 @@ public class Player extends MySketch{
     public int healthPots = 3;
     
     // drawing variables
-    public int playerX, playerY;
-    public int width, height;
+    public static int playerX, playerY;
+    public static int width, height;
     private PImage image;
     private PApplet app;
     private PImage attackImage;
@@ -131,26 +131,26 @@ public class Player extends MySketch{
         }
     }
     
-    /**
-     * check if the player is colliding with a projectile
-     * @param other projectile object
-     * @return true if the user is colliding with a projectile
-     */
-    public boolean isCollidingWith(Projectile other){
-        boolean isLeftOfOtherRight = playerX < other.projX + other.pWidth;
-        boolean isRightOfOtherLeft = playerX + width > other.projX;
-        boolean isAboveOtherBottom = playerY < other.projY + other.pHeight;
-        boolean isBelowOtherTop = playerY + height > other.projY;
-        
-        return isLeftOfOtherRight && isRightOfOtherLeft && isAboveOtherBottom && isBelowOtherTop;
-    }
+//    /**
+//     * check if the player is colliding with a projectile
+//     * @param other projectile object
+//     * @return true if the user is colliding with a projectile
+//     */
+//    public boolean isCollidingWith(Projectile other){
+//        boolean isLeftOfOtherRight = playerX < other.projX + other.pWidth;
+//        boolean isRightOfOtherLeft = playerX + width > other.projX;
+//        boolean isAboveOtherBottom = playerY < other.projY + other.pHeight;
+//        boolean isBelowOtherTop = playerY + height > other.projY;
+//        
+//        return isLeftOfOtherRight && isRightOfOtherLeft && isAboveOtherBottom && isBelowOtherTop;
+//    }
     
     /**
      * check if the player is colliding with an entity
      * @param other entity object
      * @return true if the user is colliding with an entity
      */
-    public boolean entityColiision(Entity other){
+    public boolean entityCollision(Entity other){
         boolean isLeftOfOtherRight = playerX < other.x + other.width;
         boolean isRightOfOtherLeft = playerX + width > other.x;
         boolean isAboveOtherBottom = playerY < other.y + other.height;
@@ -164,14 +164,14 @@ public class Player extends MySketch{
      * @param other projectile object
      * @return true if the attack is colliding with a projectile
      */
-    public boolean attackCollidingWith(Projectile other, int attackX, int attackY, int attackW, int attackH){
-        boolean isLeftOfOtherRight = attackX < other.projX + other.pWidth;   
-        boolean isRightOfOtherLeft = attackX + attackW > other.projX;   
-        boolean isAboveOtherBottom = attackY < other.projY + other.pHeight;
-        boolean isBelowOtherTop = attackY + attackH > other.projY;
-
-        return isLeftOfOtherRight && isRightOfOtherLeft && isAboveOtherBottom && isBelowOtherTop;
-    }
+//    public boolean attackCollidingWith(Projectile other, int attackX, int attackY, int attackW, int attackH){
+//        boolean isLeftOfOtherRight = attackX < other.projX + other.pWidth;   
+//        boolean isRightOfOtherLeft = attackX + attackW > other.projX;   
+//        boolean isAboveOtherBottom = attackY < other.projY + other.pHeight;
+//        boolean isBelowOtherTop = attackY + attackH > other.projY;
+//
+//        return isLeftOfOtherRight && isRightOfOtherLeft && isAboveOtherBottom && isBelowOtherTop;
+//    }
     
     /**
      * check if the player's attack is colliding with an entity
