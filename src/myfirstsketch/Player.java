@@ -131,20 +131,6 @@ public class Player extends MySketch{
         }
     }
     
-//    /**
-//     * check if the player is colliding with a projectile
-//     * @param other projectile object
-//     * @return true if the user is colliding with a projectile
-//     */
-//    public boolean isCollidingWith(Projectile other){
-//        boolean isLeftOfOtherRight = playerX < other.projX + other.pWidth;
-//        boolean isRightOfOtherLeft = playerX + width > other.projX;
-//        boolean isAboveOtherBottom = playerY < other.projY + other.pHeight;
-//        boolean isBelowOtherTop = playerY + height > other.projY;
-//        
-//        return isLeftOfOtherRight && isRightOfOtherLeft && isAboveOtherBottom && isBelowOtherTop;
-//    }
-    
     /**
      * check if the player is colliding with an entity
      * @param other entity object
@@ -158,20 +144,6 @@ public class Player extends MySketch{
         
         return isLeftOfOtherRight && isRightOfOtherLeft && isAboveOtherBottom && isBelowOtherTop;
     }
-
-    /**
-     * check if the player's attack is colliding with a projectile
-     * @param other projectile object
-     * @return true if the attack is colliding with a projectile
-     */
-//    public boolean attackCollidingWith(Projectile other, int attackX, int attackY, int attackW, int attackH){
-//        boolean isLeftOfOtherRight = attackX < other.projX + other.pWidth;   
-//        boolean isRightOfOtherLeft = attackX + attackW > other.projX;   
-//        boolean isAboveOtherBottom = attackY < other.projY + other.pHeight;
-//        boolean isBelowOtherTop = attackY + attackH > other.projY;
-//
-//        return isLeftOfOtherRight && isRightOfOtherLeft && isAboveOtherBottom && isBelowOtherTop;
-//    }
     
     /**
      * check if the player's attack is colliding with an entity
@@ -179,10 +151,10 @@ public class Player extends MySketch{
      * @return true if the attack is colliding with an entity
      */
     public boolean attackCollidingWith(Entity entity, int attackX, int attackY, int attackW, int attackH){ 
-        boolean  eIsLeftOfOtherRight = attackX < entity.x + entity.width;
-        boolean  eisRightOfOtherLeft = attackX + attackW > entity.x;
-        boolean  eisAboveOtherBottom = attackY < entity.y + entity.height;
-        boolean  eisBelowOtherTop = attackY + attackH > entity.y;
+        boolean eIsLeftOfOtherRight = attackX < entity.x + entity.width;
+        boolean eisRightOfOtherLeft = attackX + attackW > entity.x;
+        boolean eisAboveOtherBottom = attackY < entity.y + entity.height;
+        boolean eisBelowOtherTop = attackY + attackH > entity.y;
         
         return eIsLeftOfOtherRight && eisRightOfOtherLeft && eisAboveOtherBottom && eisBelowOtherTop;
     }
@@ -241,7 +213,7 @@ public class Player extends MySketch{
             yVelocity += GRAVITY;
             playerY += yVelocity;
         
-            // reset the player's jumping when they land on the eground
+            // reset the player's jumping when they land on the ground
             if (playerY >= 300) {
               playerY = 300;
               yVelocity = 0;
@@ -263,7 +235,7 @@ public class Player extends MySketch{
         if (isAttacking){
             // variables for the player's attack drawing
             int attackX = playerX + width - 30;
-            int attackY = playerY ;
+            int attackY = playerY;
             int attackW = 40;
             int attackH = 60;
             
@@ -295,11 +267,10 @@ public class Player extends MySketch{
                         Bosses boss = (Bosses) e; 
                         boss.currentBossHealth -= damage;
                         e.eCanBeHit = false;
-                        e.used = false;
                     }
                 }
             }
-            // rdeuce the time for how long the attack is on screen
+            // reduce the time for how long the attack is on screen
             attackTimer --;
             // when the attack ends, the player is no longer attacking
             if (attackTimer <= 0){

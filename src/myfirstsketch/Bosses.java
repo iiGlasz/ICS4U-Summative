@@ -28,7 +28,7 @@ public class Bosses extends Entity{
     private int patternCooldown = 180; // 3s cooldown
     private int cooldownTracker = 0;
     
-    
+    // constructor 
     public Bosses (PApplet p, int x, int y, int width, int height, int maxHealth, String imagePath){
         super(p, x, y);
         this.bossHealth = maxHealth;
@@ -47,6 +47,12 @@ public class Bosses extends Entity{
         this.projectiles = new ArrayList<>();
     }
     
+    /**
+     * creates the attack pattern based on the array list of projectilepattern
+     * appends to an arraylist of projectiles then draws them based on the phase
+     * of the attack
+     * @param player the player object 
+     */
     public void attackPattern(Player player){
         // increase the cooldown tracker
         cooldownTracker++;
@@ -63,7 +69,6 @@ public class Bosses extends Entity{
                     int x = 450 + i * spacing;
                     // if the column is equal to 1, create a projectile, if its the 4th attack, set it to be higher
                     if (projectilePattern[patternRow][i] == 1 && patternRow % 3 == 0 && patternRow != 0){
-                        
                         projectiles.add(new Projectile(app, x, rand.nextInt(150,300) - 100, 20, 20, false, 0, "images/enemies/projectile.png"));
                     }
                     else if (projectilePattern[patternRow][i] == 1){

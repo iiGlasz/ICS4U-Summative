@@ -227,10 +227,10 @@ public class Scene {
             this.endingScreen = app.loadImage("images/endings/wukongCorrupted.png");
             endingType = "Corruption Ending";
         }
-        // true enlightenment ending
+        // enlightenment ending
         else if (Player.discipline == 4){
             this.endingScreen = app.loadImage("images/endings/wukongHeavenly.png");
-            endingType = "True Enlighenment Ending";
+            endingType = "Enlightenment Ending";
         }
         // neutral ending
         else {
@@ -264,14 +264,19 @@ public class Scene {
      * draws the main menu
      */
     public void drawMainMenu() {
-        app.background(255);
+        app.background(50);
+        
         app.textAlign(CENTER);
-        app.fill(0);
+        app.fill(255);
         app.textSize(40);
         app.text("Journey to the West", 400, 150);
 
         app.textSize(24);
         app.text("Press ENTER to Start",400, 250);
+        
+        app.textSize(20);
+        app.text("Press p to save game\n Press l to load save file",100, 320);
+        app.text("Press z to heal\n Press x to attack",700, 320);
     }
     
     /**
@@ -311,8 +316,9 @@ public class Scene {
      * @param fileName file location for the file being read
      */
     public void fileTextReader(String fileName){
-
+        // clear out the array list
         lines.clear();
+        // read from the file and append to the array list
         try {
             File file = new File(fileName);
             Scanner scanner = new Scanner(file);

@@ -14,13 +14,18 @@ public class TeamMembers{
     private static int healingCD = 1200; //time in frames
     public static boolean sandy = false;
     
+    /**
+     * buffs the player with heals every 20 seconds and a damage increase
+     * @param player the player object
+     */
     public static void buffs(Player player){
-        // if pigsy is active, heal the player every ~12 seconds
+        // if pigsy is active, heal the player every ~20 seconds
         if (pigsy){
             healingCD--;
+            // heal if the player has taken damage and bring this back on cooldown
             if (healingCD <= 0 && player.health < player.max_Health){
                 player.health++;
-                healingCD = 800;
+                healingCD = 1200;
             }
         }
        

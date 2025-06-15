@@ -46,8 +46,8 @@ public class MySketch extends PApplet{
     boolean choice1, choice2, choice3 = false;
     boolean savingMenu = false;
     boolean loadMenu = false;
+    public static boolean mainMenu = true;
     
-        
     
     public void settings(){
         size(800,400);
@@ -85,10 +85,12 @@ public class MySketch extends PApplet{
         switch (gameState){
             // main menu screen
             case 0:  
-                if (!savingMenu && !loadMenu)
-                scene.drawMainMenu();
+                if (mainMenu)
+                    scene.drawMainMenu();
+                    
                 // progress if they press enter
                 if (canPressEnter && keyCode == ENTER){
+                    mainMenu = false;
                     canPressEnter = false;
                     Scene.chapterScreen++;
                     gameState++;
@@ -293,6 +295,7 @@ public class MySketch extends PApplet{
         
         // for opening the save menu
         if (key == 'p'){
+            mainMenu = false;
             combat = false;
             dialogue = false;
             loadMenu = false;
@@ -303,6 +306,7 @@ public class MySketch extends PApplet{
         
         // for opening the load menu
         if (key == 'l'){
+            mainMenu = false;
             combat = false;
             dialogue = false;
             savingMenu = false;
@@ -493,12 +497,15 @@ public class MySketch extends PApplet{
         // check the buttons for saving menu
         if (saveButton1.isClicked(mouseX, mouseY) && savingMenu){
             save.saveGame(1);
+            savingMenu = false;
         } 
         else if (saveButton2.isClicked(mouseX, mouseY) && savingMenu){
             save.saveGame(2);
+            savingMenu = false;
         }
         else if (saveButton3.isClicked(mouseX, mouseY) && savingMenu){
             save.saveGame(3);
+            savingMenu = false;
         }
         
         // check the buttons for loading menu, then load the save files
@@ -508,11 +515,11 @@ public class MySketch extends PApplet{
         } 
         else if (loadButton2.isClicked(mouseX, mouseY) && loadMenu){
             save.loadGame(2);
-             loadMenu = false;
+            loadMenu = false;
         }
         else if (loadButton3.isClicked(mouseX, mouseY) && loadMenu){
             save.loadGame(3);
-             loadMenu = false;
+            loadMenu = false;
         }
     }
 }

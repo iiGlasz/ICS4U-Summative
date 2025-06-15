@@ -66,6 +66,7 @@ public class GameSaver {
             // print a message
             System.out.println("Game Saved!");
             // return to the main menu
+            MySketch.mainMenu = true;
             MySketch.gameState = 0;
         }
         catch(IOException e){

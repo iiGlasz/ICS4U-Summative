@@ -5,7 +5,6 @@
 package myfirstsketch;
 import processing.core.PApplet;
 import java.util.ArrayList;
-import java.util.Random;
 
 /**
  *
@@ -36,12 +35,8 @@ public class Battle extends PApplet{
             
             // loop through all entities
             for (Entity e : entities){
-                //keep the boss on screen
-                if (e instanceof Bosses){
-                    e.used = false;
-                }
-                // draw the entities if they are not dead
-                else if (!e.used){
+                //draw them if they aren't dead
+                if (!e.used){
                     e.draw();
                 }
             }
@@ -68,6 +63,9 @@ public class Battle extends PApplet{
            for (Entity e: entities){
                 if (player.entityCollision(e) && !e.used && !player.isInvincible){
                    player.takeDamage();
+                }
+                if (e instanceof Bosses){
+                    e.used = false;
                 }
            }
            // draw player last so it's on top

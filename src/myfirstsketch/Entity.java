@@ -11,6 +11,7 @@ import processing.core.PImage;
  * @author ljphi
  */
 public class Entity{
+    // instance variables
     public int x, y;
     public int width, height;
     private int speed;
@@ -56,10 +57,8 @@ public class Entity{
     
     /**
      * draws the entity and moves it towards the player
-     * @param player player object
      */
     public void draw(){
-        app.fill(255, 0, 0);
         app.image(image, x, y);
         this.move();
     }

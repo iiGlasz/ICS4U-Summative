@@ -13,12 +13,9 @@ import processing.core.PImage;
  */
 public class Projectile extends Entity{
     // projectile variables
-//    public int x, y;
-//    public int pWidth, pHeight;
     private PImage image;
     private PApplet app;
     
-    public boolean used = false;
     private int xSpeed;
     private double ySpeed;
     private final double GRAVITY = 0.15;
