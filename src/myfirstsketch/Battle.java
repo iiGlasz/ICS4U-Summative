@@ -12,29 +12,41 @@ import java.util.Random;
  * @author ljphi
  */
 public class Battle extends PApplet{
-     Random rand = new Random();
     
     public Battle(){
     }
 
+    /**
+     * Handles all of the player interactions and drawing of entities in every battle
+     * @param player the player object
+     * @param entities list of entity objects
+     * @param boss the boss object
+     * @param keyPressed whether or not a key has been pressed
+     */
     public void BattleStart(Player player, ArrayList<Entity> entities, Bosses boss, boolean keyPressed){
-            
-            
+            // call the buffs from TeamMembers if they are active
             TeamMembers.buffs(player);
+            // draw the boss
             boss.draw(player);
             
+            // if the boss is alive, make it attack
             if (boss.currentBossHealth > 0){
                 boss.attackPattern(player);
             }
+            
+            // loop through all entities
             for (Entity e : entities){
+                //keep the boss on screen
                 if (e instanceof Bosses){
                     e.used = false;
                 }
+                // draw the entities if they are not dead
                 else if (!e.used){
                     e.draw(player);
                 }
             }
 
+            // move and make the player face the correct direction
             if (keyPressed){
                 if(player.movingLeft && player.playerX >= 0){
                     player.move(-5);
@@ -44,6 +56,7 @@ public class Battle extends PApplet{
                 }
             }
 
+           // loop through all the boss' projectiles and check if they hit the player
            for (Projectile p: boss.projectiles){
                 if (player.isCollidingWith(p) && !p.used && !player.isInvincible){
                    player.takeDamage();
@@ -51,6 +64,7 @@ public class Battle extends PApplet{
                }
            }
            
+           // check if the entities have hit the player
            for (Entity e: entities){
                 if (player.entityColiision(e) && !e.used && !player.isInvincible){
                    player.takeDamage();

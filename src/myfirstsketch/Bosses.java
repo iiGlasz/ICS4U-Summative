@@ -14,7 +14,7 @@ import java.util.Random;
  * @author ljphi
  */
 public class Bosses extends Entity{
-    
+    // variables for the boss
     private int bossHealth = 300;
     public int currentBossHealth;
     Random rand = new Random();
@@ -22,11 +22,11 @@ public class Bosses extends Entity{
     
     // attack related variables
     public ArrayList<Projectile> projectiles;
-    private int [][] projectilePattern; // [row][column]
+    private int [][] projectilePattern;
     
-    private int patternStep = 0;
-    private int patternCooldown = 180; // delay between steps
-    private int stepCounter = 0;
+    private int patternRow = 0;
+    private int patternCooldown = 180; // 3s cooldown
+    private int cooldownTracker = 0;
     
     
     public Bosses (PApplet p, int x, int y, int width, int height, int maxHealth, String imagePath){
@@ -39,40 +39,59 @@ public class Bosses extends Entity{
                
         
         this.projectilePattern = new int[][]{
-            {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-            {0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1},
-            {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+            {1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1}, // more front heavy
+            {0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 0, 1}, // back heavy
+            {0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1}, // back
+            {1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 0}, // front heavy
         };
         this.projectiles = new ArrayList<>();
     }
     
     public void attackPattern(Player player){
-        stepCounter++;
+        // increase the cooldown tracker
+        cooldownTracker++;
 
-        // Only trigger every `patternCooldown` frames
-        if (stepCounter >= patternCooldown){
-            stepCounter = 0;
-
-            // Loop over the current pattern row
-            if (patternStep < projectilePattern.length){
-                for (int i = 0; i < projectilePattern[patternStep].length; i++){
-                    if (projectilePattern[patternStep][i] == 1){
-                        projectiles.add(new Projectile(app, rand.nextInt(501, 780), rand.nextInt(150,300), 20, 20, false, rand.nextInt(-1,1), "images/enemies/projectile.png"));
+        // only attack when the stepcounter is equal to the cooldown
+        if (cooldownTracker >= patternCooldown){
+            cooldownTracker = 0;
+            // loop over the projectile pattern rows
+            if (patternRow < projectilePattern.length){
+                // for each column of the pattern
+                for (int i = 0; i < projectilePattern[patternRow].length; i++){
+                    // spacing so that each projectile doesnt overlap 
+                    int spacing = 20;
+                    int x = 450 + i * spacing;
+                    // if the column is equal to 1, create a projectile, if its the 4th attack, set it to be higher
+                    if (projectilePattern[patternRow][i] == 1 && patternRow % 3 == 0 && patternRow != 0){
+                        
+                        projectiles.add(new Projectile(app, x, rand.nextInt(150,300) - 100, 20, 20, false, 0, "images/enemies/projectile.png"));
+                    }
+                    else if (projectilePattern[patternRow][i] == 1){
+                        projectiles.add(new Projectile(app, x + 200, rand.nextInt(150,300), 20, 20, false, -6, "images/enemies/projectile.png"));
                     }
                 }
-                patternStep++;
-            } else {
-                //loops the attack pattern
-                patternStep = 0; 
+                patternRow++;
+                
+            }
+            //loops the attack pattern
+            else {
+                patternRow = 0; 
             }
         }
-        // draw the projectiles
+        
+        // draw the projectiles depending on the attack pattern row
         for (Projectile p : projectiles){
-            if (!p.used && patternStep % 2 == 0)
+            // draw projectiles falling straight down
+            if (!p.used && patternRow % 3 == 0 && patternRow != 0){
+                p.drawGravityNoX();
+            }
+            // draw projectiles being shot forward
+            else if (!p.used && patternRow % 2 == 0)
                 p.drawGravity(); 
+            // draw projectiles moving in a straight line
             else if (!p.used)
-                p.drawStraight();
-
+               p.drawStraight();
+            // if the projectile hits the player
             if (player.isCollidingWith(p) && !p.used && !player.isInvincible){
                player.takeDamage();
                p.used = true; 
@@ -80,8 +99,12 @@ public class Bosses extends Entity{
         }
     }
   
-
+    // override since boss inherits from entity
     @Override
+    /**
+     * draws the boss and its health bar
+     * @param player
+     */
     public void draw(Player player){
         // draw the boss
         app.fill(255, 0, 0);
